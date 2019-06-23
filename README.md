@@ -1,9 +1,9 @@
 # Volleyball
 
 ## Options
-- [ ] Bulma CSS
-- [ ] Extend Wes Bos project (NEXTjs, GraphQL, Postgres)?
-- [ ] Emotion
+- [X] Bulma CSS
+- [X] Extend Wes Bos project (NEXTjs, GraphQL, Postgres)?
+- [X] Styled Components
 
 ## Deployment
 - [ ] Now
@@ -16,3 +16,7 @@
 - [ ] User should be able to keep track of the score of a match/game
 - [ ] User should be able to record serves, blocks, passes, and kills/attempts for each player
 - [ ] User should be able to see a history of actions during a game
+
+### Team Model
+
+### Player Model
