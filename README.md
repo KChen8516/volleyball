@@ -17,6 +17,21 @@
 - [ ] User should be able to record serves, blocks, passes, and kills/attempts for each player
 - [ ] User should be able to see a history of actions during a game
 
+## Running Frontend
+```
+npm run dev
+```
+
+## Running Backend
+Update the Prisma DB 
+```
+npm run deploy
+```
+Start the Backend locally 
+```
+npm run dev
+```
+
 ### Team Model
 
 ### Player Model
