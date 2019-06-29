@@ -32,6 +32,8 @@ Start the Backend locally
 npm run dev
 ```
 
-### Team Model
+### Creating a new type
+Make sure to update ```datamodel.graphql``` first. Once the model is available on the BE, update ```schema.graphql``` with the Query or Mutations you want. Then update the correct resolver (Mutation, Query) where you can reference generated/prisma.graphql for options.
 
-### Player Model
+```schema.graphql``` represents the public facing API for clients to consume.
+

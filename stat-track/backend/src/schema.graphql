@@ -1,7 +1,16 @@
+# Prisma has an import workflow that's not graphql standard.
+# This allows us to not repeat typing existing types
+# import * from './generated/prisma.graphql'
+
 type Mutation {
-    hi: String
+  createPlayer(
+    number: String!
+    position: String!
+    firstName: String!
+    lastName: String!
+  ): Player!
 }
 
 type Query {
-    bye: String
+  players: [Player]!
 }

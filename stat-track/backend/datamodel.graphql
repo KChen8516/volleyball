@@ -1,0 +1,19 @@
+# For reference to Prisma DB
+type User {
+  id: ID! @id
+  firstName: String!
+  lastName: String!
+  email: String @unique
+}
+
+type Player {
+  id: ID! @id
+  number: String!
+  position: String!
+  firstName: String!
+  lastName: String!
+  image: String
+  createdAt: DateTime @createdAt
+  updateAt: DateTime
+  # team: Team!
+}
