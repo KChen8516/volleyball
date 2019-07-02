@@ -14,5 +14,6 @@ export const Meta = () => (
       href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css"
     />
     <title>Stat Track</title>
+    <script src="https://kit.fontawesome.com/e44963f9d5.js" />
   </Head>
 );

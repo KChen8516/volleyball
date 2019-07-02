@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const Nav = () => (
-  <nav className="navbar" role="navigation" aria-label="main navigation">
+  <nav className="navbar is-light" role="navigation" aria-label="main navigation">
     <div className="navbar-brand">
       <Link href="/">
         <a className="navbar-item">
@@ -28,16 +28,22 @@ export const Nav = () => (
           <a className="navbar-item">Home</a>
         </Link>
 
-        <a className="navbar-item">Teams</a>
+        <Link href="/players">
+          <a className="navbar-item">Players</a>
+        </Link>
       </div>
 
       <div className="navbar-end">
         <div className="navbar-item">
           <div className="buttons">
-            <a className="button is-primary">
-              <strong>Sign up</strong>
-            </a>
-            {/* <a class="button is-light">Log in</a> */}
+            <Link href="/create">
+              <a className="button is-primary">
+                <strong>Create</strong>
+              </a>
+            </Link>
+            {/* <Link href="/create">
+              <a className="button is-light">Sign Up</a>
+            </Link> */}
           </div>
         </div>
       </div>
