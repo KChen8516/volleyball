@@ -18,6 +18,7 @@ type Mutation {
   ): Player
   deletePlayer(id: ID!): Player
   createTeam(city: String, name: String!, players: PlayerCreateManyInput): Team
+  signup(email: String!, password: String!, name: String!): User!
 }
 
 type Query {

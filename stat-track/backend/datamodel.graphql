@@ -1,9 +1,29 @@
 # For reference to Prisma DB
+# 1. Add the type
+# 2. Update schema.graphql with mutation/query
+# 3. Update the correct resolvers
+
+# preset list of possible options
+enum Permission {
+  ADMIN
+  USER
+  PERMISSIONUPDATE
+  PLAYERCREATE
+  PLAYERUPDATE
+  PLAYERDELETE
+  TEAMCREATE
+  TEAMUPDATE
+  TEAMDELETE
+}
+
 type User {
   id: ID! @id
-  firstName: String!
-  lastName: String!
-  email: String @unique
+  name: String!
+  email: String! @unique
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: [Permission] @scalarList(strategy: RELATION)
 }
 
 type Player {

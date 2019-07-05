@@ -1,3 +1,5 @@
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 /**
  * You can reference ../generated/prisma.graphql for DB options
  */
@@ -51,6 +53,34 @@ const Mutations = {
       info,
     );
     return team;
+  },
+  async signup(parent, args, context, info) {
+    // enforce a consistently stored case
+    args.email = args.email.toLowerCase();
+    // one-way hash the password
+    // 1. accept the password and create a hash with it
+    // (password, salt length || your own salt)
+    const hash = await bcrypt.hash(args.password, 10);
+
+    // create the user in the DB
+    const user = await context.database.mutation.createUser(
+      {
+        data: {
+          ...args,
+          password: hash,
+          permissions: { set: [ "USER" ] },
+        },
+      },
+      info,
+    );
+    // create the JWT for the new user
+    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
+    context.response.cookie("token", token, {
+      httpOnly: true, // prevent JS access to the token
+      maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year
+    });
+
+    return user;
   },
 };
 
