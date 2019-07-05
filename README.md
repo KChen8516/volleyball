@@ -12,7 +12,7 @@
 - [ ] Heroku
 
 ## Features
-- [ ] User should be able to create/edit/delete a player
+- [X] User should be able to create/edit/delete a player
 - [ ] User should be able to create/edit/delete a team of players
 - [ ] User should be able to keep track of the score of a match/game
 - [ ] User should be able to record serves, blocks, passes, and kills/attempts for each player

@@ -2,9 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import Link from "next/link";
 
-export const Player = ({ player }) => {
+export const Player = ({ player, toggleModal, setPlayer }) => {
   return (
-    <div className="column is-one-quarter-desktop" key={player.id}>
+    <div className="column is-one-quarter-desktop is-one-third-tablet" key={player.id}>
       <div className="card">
         <header className="card-header">
           <Link
@@ -33,9 +33,15 @@ export const Player = ({ player }) => {
           </div>
         </div>
         <footer className="card-footer">
-          <a href="#" className="card-footer-item">
+          {/* <a
+            href="#"
+            className="card-footer-item"
+            onClick={() => {
+              toggleModal(true);
+            }}
+          >
             Save
-          </a>
+          </a> */}
           <Link
             href={{
               pathname: "update",
@@ -44,7 +50,14 @@ export const Player = ({ player }) => {
           >
             <a className="card-footer-item">Edit</a>
           </Link>
-          <a href="#" className="card-footer-item">
+          <a
+            href="#"
+            className="card-footer-item"
+            onClick={() => {
+              toggleModal(true);
+              setPlayer(player);
+            }}
+          >
             Delete
           </a>
         </footer>
@@ -60,4 +73,5 @@ Player.prototype = {
     position: PropTypes.string,
     nunber: PropTypes.string,
   }),
+  toggleModal: PropTypes.func,
 };

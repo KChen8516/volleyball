@@ -1,3 +1,3 @@
-import { PlayerForm } from "../components/AddPlayer";
+import { CreateTabs } from "../components/Create";
 
-export default PlayerForm;
+export default CreateTabs;

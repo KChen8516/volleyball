@@ -6,19 +6,9 @@ import Router from "next/router";
 
 import Error from "./ErrorMessage";
 
-const CREATE_PLAYER_MUTATION = gql`
-  mutation CREATE_PLAYER_MUTATION(
-    $number: String!
-    $position: String!
-    $firstName: String!
-    $lastName: String!
-  ) {
-    createPlayer(
-      number: $number
-      lastName: $lastName
-      firstName: $firstName
-      position: $position
-    ) {
+const CREATE_TEAM_MUTATION = gql`
+  mutation CREATE_TEAM_MUTATION($city: String, $name: String!, $players: [Player!]) {
+    createTeam(city: $city, name: $name, players: $players) {
       id
     }
   }
@@ -26,29 +16,24 @@ const CREATE_PLAYER_MUTATION = gql`
 
 const TopPadding = styled.div`padding-top: 10px;`;
 
-export const PlayerForm = () => {
-  const [ firstName, setFirstName ] = useState();
-  const [ lastName, setLastName ] = useState();
-  const [ position, setPosition ] = useState();
-  const [ number, setNumber ] = useState();
+export const TeamForm = () => {
+  const [ city, setCity ] = useState();
+  const [ name, setName ] = useState();
 
   const handleFormUpdate = (e) => {
     const { name, type, value } = e.target;
 
     const val = type === "number" ? parseFloat(value) : value;
     switch (name) {
-      case "firstName":
-        setFirstName(val);
+      case "city":
+        setCity(val);
         break;
-      case "lastName":
-        setLastName(val);
+      case "name":
+        setName(val);
         break;
-      case "position":
-        setPosition(val);
-        break;
-      case "number":
-        setNumber(val);
-        break;
+      //   case "players":
+      //     setPosition(val);
+      //     break;
       default:
         return;
     }
@@ -58,49 +43,46 @@ export const PlayerForm = () => {
     const res = await mutation();
 
     Router.push({
-      pathname: "/player",
+      pathname: "/team",
       query: { id: res.data.createPlayer.id },
     });
   };
 
   return (
-    <Mutation
-      mutation={CREATE_PLAYER_MUTATION}
-      variables={{ firstName, lastName, number, position }}
-    >
-      {(createPlayer, { error, loading }) => (
+    <Mutation mutation={CREATE_TEAM_MUTATION} variables={{ name, city, players: [] }}>
+      {(createTeam, { error, loading }) => (
         <TopPadding className="container is-fluid">
           <Error error={error} />
           <fieldset disabled={loading} aria-busy={loading}>
-            <h2 className="title is-2">Create a Player</h2>
+            <h2 className="title is-2">Create a Team</h2>
             <div className="field">
-              <label className="label">First Name</label>
+              <label className="label">Team Name</label>
               <div className="control">
                 <input
                   className="input"
-                  name="firstName"
+                  name="name"
                   type="text"
                   placeholder="e.g Alex Smith"
-                  value={firstName}
+                  value={name}
                   onChange={handleFormUpdate}
                 />
               </div>
             </div>
 
             <div className="field">
-              <label className="label">Last Name</label>
+              <label className="label">City</label>
               <div className="control">
                 <input
                   className="input"
-                  name="lastName"
+                  name="city"
                   type="text"
-                  placeholder="e.g. alexsmith@gmail.com"
-                  value={lastName}
+                  placeholder="e.g. Santa Clara"
+                  value={city}
                   onChange={handleFormUpdate}
                 />
               </div>
             </div>
-            <div className="field">
+            {/* <div className="field">
               <label className="label">Position</label>
               <div className="control">
                 <div className="select">
@@ -117,29 +99,14 @@ export const PlayerForm = () => {
                   </select>
                 </div>
               </div>
-            </div>
-            <div className="field column is-1" style={{ padding: "10px 0 0 0" }}>
-              <p className="control has-icons-left">
-                <input
-                  className="input"
-                  type="text"
-                  placeholder="Number"
-                  value={number}
-                  onChange={handleFormUpdate}
-                  name="number"
-                />
-                <span className="icon is-small is-left">
-                  <i className="fas fa-volleyball-ball" />
-                </span>
-              </p>
-            </div>
+            </div> */}
             <TopPadding>
               <div className="field is-grouped">
                 <p className="control">
                   <a
                     className="button is-primary"
                     onClick={() => {
-                      onSubmitPlayer(createPlayer);
+                      onSubmitPlayer(createTeam);
                     }}
                   >
                     Submit

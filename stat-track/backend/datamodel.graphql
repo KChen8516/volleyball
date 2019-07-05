@@ -17,3 +17,12 @@ type Player {
   updateAt: DateTime
   # team: Team!
 }
+
+type Team {
+  id: ID! @id
+  city: String
+  name: String!
+  players: [Player!]
+  createdAt: DateTime @createdAt
+  updateAt: DateTime
+}

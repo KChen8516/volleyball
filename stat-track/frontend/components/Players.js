@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
 
 import { Player } from "./Player";
+import { DeletePlayerModal } from "./DeletePlayerModal";
 
-const Container = styled.div`padding-top: 10px;`;
+const Container = styled.div`padding: 10px 32px 0 32px;`;
 
-const ALL_PLAYERS_QUERY = gql`
+export const ALL_PLAYERS_QUERY = gql`
   query ALL_PLAYERS_QUERY {
     players {
       id
@@ -21,6 +22,8 @@ const ALL_PLAYERS_QUERY = gql`
 `;
 
 export const Players = (props) => {
+  const [ isActive, setIsActive ] = useState(false);
+  const [ player, setPlayer ] = useState();
   return (
     <Query query={ALL_PLAYERS_QUERY}>
       {({ data, error, loading }) => {
@@ -30,11 +33,19 @@ export const Players = (props) => {
         const { players } = data;
 
         return (
-          <Container className="container is-fluid">
+          <Container>
             <h2 className="title is-2">Players</h2>
-            <div className="columns">
-              {players.map((player) => <Player player={player} key={player.id} />)}
+            <div className="columns is-multiline is-mobile">
+              {players.map((player) => (
+                <Player
+                  player={player}
+                  key={player.id}
+                  toggleModal={setIsActive}
+                  setPlayer={setPlayer}
+                />
+              ))}
             </div>
+            <DeletePlayerModal isActive={isActive} toggle={setIsActive} player={player} />
           </Container>
         );
       }}

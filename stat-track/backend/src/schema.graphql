@@ -9,8 +9,19 @@ type Mutation {
     firstName: String!
     lastName: String!
   ): Player!
+  updatePlayer(
+    id: ID!
+    number: String
+    position: String
+    firstName: String
+    lastName: String
+  ): Player
+  deletePlayer(id: ID!): Player
+  createTeam(city: String, name: String!, players: PlayerCreateManyInput): Team
 }
 
 type Query {
   players: [Player]!
+  # similar to (id: ID!)
+  player(where: PlayerWhereUniqueInput!): Player
 }
