@@ -41,9 +41,9 @@ export const Nav = () => (
                 <strong>Create</strong>
               </a>
             </Link>
-            {/* <Link href="/create">
+            <Link href="/signup">
               <a className="button is-light">Sign Up</a>
-            </Link> */}
+            </Link>
           </div>
         </div>
       </div>
