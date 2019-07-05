@@ -17,9 +17,9 @@ const HalfContainer = styled.div`width: 50%;`;
 
 const TopPadding = styled.div`padding-top: 10px;`;
 
-const SIGNUP_MUTATION = gql`
-  mutation SIGNUP_MUTATION($email: String!, $name: String!, $password: String!) {
-    signup(email: $email, name: $name, password: $password) {
+const SIGNIN_MUTATION = gql`
+  mutation SIGNIN_MUTATION($email: String!, $password: String!) {
+    signin(email: $email, password: $password) {
       id
       email
       name
@@ -27,63 +27,41 @@ const SIGNUP_MUTATION = gql`
   }
 `;
 
-export const SignUpForm = () => {
-  const [ name, setName ] = useState();
+export const SignInForm = () => {
   const [ email, setEmail ] = useState();
   const [ password, setPassword ] = useState();
 
   const handleUpdateForm = (e) => {
     const { name, value } = e.target;
 
-    if (name === "name") setName(value);
     if (name === "email") setEmail(value);
     if (name === "password") setPassword(value);
   };
 
-  const signUpUser = async (mutation) => {
+  const signInUser = async (mutation) => {
     const rest = await mutation();
     // TODO: redirect the user somewhere
     clearState();
   };
 
   const clearState = () => {
-    setName("");
     setEmail("");
     setPassword("");
   };
 
   return (
     <Mutation
-      mutation={SIGNUP_MUTATION}
-      variables={{ name, email, password }} // refetch on successful mutation
+      mutation={SIGNIN_MUTATION}
+      variables={{ email, password }}
+      // refetch on successful mutation
       refetchQueries={[ { query: CURRENT_USER_QUERY } ]}
     >
-      {(signUp, { error, loading }) => {
+      {(signIn, { error, loading }) => {
         return (
           <CenteredContainer>
             <HalfContainer className="box">
               <fieldset disabled={loading} aria-busy={loading}>
                 <Error error={error} />
-                <div className="field is-horizontal">
-                  <div className="field-label is-normal">
-                    <label className="label">Name</label>
-                  </div>
-                  <div className="field-body">
-                    <div className="control has-icons-left">
-                      <input
-                        className="input is-medium"
-                        type="text"
-                        placeholder="Name"
-                        name="name"
-                        value={name}
-                        onChange={handleUpdateForm}
-                      />
-                      <span className="icon is-left">
-                        <i className="fas fa-user" />
-                      </span>
-                    </div>
-                  </div>
-                </div>
                 <div className="field is-horizontal">
                   <div className="field-label is-normal">
                     <label className="label">Email</label>
@@ -130,15 +108,15 @@ export const SignUpForm = () => {
                       <a
                         className="button is-primary"
                         onClick={() => {
-                          signUpUser(signUp);
+                          signInUser(signIn);
                         }}
                       >
-                        Sign Up
+                        Sign In
                       </a>
                     </p>
                     <p className="control">
                       <a className="button is-light" onClick={clearState}>
-                        Clear
+                        Reset
                       </a>
                     </p>
                   </div>

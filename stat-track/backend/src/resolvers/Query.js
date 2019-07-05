@@ -14,6 +14,14 @@ const Query = {
   },
   // shortcut for prisma
   player: forwardTo("database"),
+  me(parent, args, context, info) {
+    // check if there's a current userId
+    if (!context.request.userId) {
+      return null;
+    }
+
+    return context.database.query.user({ where: { id: context.request.userId } }, info);
+  },
 };
 
 module.exports = Query;

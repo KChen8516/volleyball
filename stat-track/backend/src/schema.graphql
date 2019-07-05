@@ -2,6 +2,11 @@
 # This allows us to not repeat typing existing types
 # import * from './generated/prisma.graphql'
 
+# custom frontend type
+type SuccessMessage {
+  message: String
+}
+
 type Mutation {
   createPlayer(
     number: String!
@@ -19,10 +24,15 @@ type Mutation {
   deletePlayer(id: ID!): Player
   createTeam(city: String, name: String!, players: PlayerCreateManyInput): Team
   signup(email: String!, password: String!, name: String!): User!
+  signin(email: String!, password: String!): User!
+  # custom type
+  signout: SuccessMessage
 }
 
 type Query {
   players: [Player]!
   # similar to (id: ID!)
   player(where: PlayerWhereUniqueInput!): Player
+  # check for logged in user
+  me: User
 }
