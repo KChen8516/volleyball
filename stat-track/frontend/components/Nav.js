@@ -50,24 +50,24 @@ export const Nav = () => (
 
           <div className="navbar-end">
             {me && (
-              <Fragment>
-                <div className="navbar-item">
-                  <p>Welcome, {me.name}</p>
-                </div>
-                <Mutation
-                  mutation={SIGNOUT_MUTATION}
-                  refetchQueries={[ { query: CURRENT_USER_QUERY } ]}
-                >
-                  {(signOut) => (
-                    <a className="button is-light" onClick={signOut}>
-                      Sign Out
-                    </a>
-                  )}
-                </Mutation>
-              </Fragment>
+              <div className="navbar-item">
+                <p>Welcome, {me.name}</p>
+              </div>
             )}
             <div className="navbar-item">
               <div className="buttons">
+                {me && (
+                  <Mutation
+                    mutation={SIGNOUT_MUTATION}
+                    refetchQueries={[ { query: CURRENT_USER_QUERY } ]}
+                  >
+                    {(signOut) => (
+                      <a className="button is-light" onClick={signOut}>
+                        Sign Out
+                      </a>
+                    )}
+                  </Mutation>
+                )}
                 {!me && (
                   <Fragment>
                     <Link href="/signup">

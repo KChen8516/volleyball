@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from "react";
 import styled from "styled-components";
 
+import { RestrictSignIn } from "./RestrictSignIn";
 import { PlayerForm } from "./AddPlayer";
 import { TeamForm } from "./AddTeam";
 
@@ -9,7 +10,7 @@ const Container = styled.div`padding: 0 32px;`;
 export const CreateTabs = () => {
   const [ currentTab, setCurrentTab ] = useState("player");
   return (
-    <Fragment>
+    <RestrictSignIn>
       <Container className="tabs is-large">
         <ul>
           <li
@@ -34,6 +35,6 @@ export const CreateTabs = () => {
       </Container>
       {currentTab === "player" && <PlayerForm />}
       {currentTab === "team" && <TeamForm />}
-    </Fragment>
+    </RestrictSignIn>
   );
 };

@@ -5,11 +5,22 @@ const jwt = require("jsonwebtoken");
  */
 const Mutations = {
   async createPlayer(parent, args, context, info) {
+    // restrict player creation to registered users
+    if (!context.request.userId) {
+      throw new Error("You must be logged in to do that!");
+    }
     // create a player in the Prisma DB
     const player = await context.database.mutation.createPlayer(
       {
         data: {
           ...args,
+          // this is how you create a relationship between
+          // user and player
+          user: {
+            connect: {
+              id: context.request.userId,
+            },
+          },
         },
       },
       // informs what to return

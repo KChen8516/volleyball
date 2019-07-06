@@ -35,6 +35,7 @@ type Player {
   image: String
   createdAt: DateTime @createdAt
   updateAt: DateTime
+  user: User!
   # team: Team!
 }
 
