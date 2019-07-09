@@ -43,7 +43,8 @@ type Team {
   id: ID! @id
   city: String
   name: String!
-  players: [Player!]
+  user: User!
+  # players: [Player!]
   createdAt: DateTime @createdAt
   updateAt: DateTime
 }

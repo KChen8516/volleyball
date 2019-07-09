@@ -57,9 +57,22 @@ const Mutations = {
     return context.database.mutation.deletePlayer({ where }, info);
   },
   async createTeam(parent, args, context, info) {
+    // restrict team creation to registered users
+    if (!context.request.userId) {
+      throw new Error("You must be logged in to do that!");
+    }
     const team = await context.database.mutation.createTeam(
       {
-        data: { ...args },
+        data: {
+          ...args,
+          // this is how you create a relationship between
+          // user and player
+          user: {
+            connect: {
+              id: context.request.userId,
+            },
+          },
+        },
       },
       info,
     );

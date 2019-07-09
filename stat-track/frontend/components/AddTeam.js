@@ -7,8 +7,8 @@ import Router from "next/router";
 import Error from "./ErrorMessage";
 
 const CREATE_TEAM_MUTATION = gql`
-  mutation CREATE_TEAM_MUTATION($city: String, $name: String!, $players: [Player!]) {
-    createTeam(city: $city, name: $name, players: $players) {
+  mutation CREATE_TEAM_MUTATION($city: String, $name: String!) {
+    createTeam(city: $city, name: $name) {
       id
     }
   }
@@ -44,7 +44,7 @@ export const TeamForm = () => {
 
     Router.push({
       pathname: "/team",
-      query: { id: res.data.createPlayer.id },
+      query: { id: res.data.createTeam.id },
     });
   };
 
