@@ -18,6 +18,9 @@ const SINGLE_PLAYER_QUERY = gql`
       lastName
       position
       number
+      team {
+        name
+      }
     }
   }
 `;
@@ -39,7 +42,8 @@ export const PlayerProfile = ({ id }) => (
           );
         }
 
-        const { player: { firstName, lastName, position, number } } = data;
+        const { player: { firstName, lastName, position, number, team } } = data;
+
         return (
           <Fragment>
             {/* Side effect from NextJS */}
@@ -72,6 +76,7 @@ export const PlayerProfile = ({ id }) => (
               <div className="tile is-parent">
                 <div className="tile is-child box">
                   <p className="title">Stats</p>
+                  <p className="subtitle">Team: {team.name}</p>
                   <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam semper
                     diam at erat pulvinar, at pulvinar felis blandit. Vestibulum volutpat

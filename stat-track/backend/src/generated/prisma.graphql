@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/kai-chen-2ef5a9/volley-track/dev
-# timestamp: Fri Jul 05 2019 17:23:24 GMT-0700 (Pacific Daylight Time)
+# timestamp: Tue Jul 09 2019 16:49:09 GMT-0700 (Pacific Daylight Time)
 
 type AggregatePlayer {
   count: Int!
@@ -96,6 +96,7 @@ type Player implements Node {
   createdAt: DateTime
   updateAt: DateTime
   user: User!
+  team: Team!
 }
 
 """A connection to a list of items."""
@@ -117,6 +118,7 @@ input PlayerCreateInput {
   image: String
   updateAt: DateTime
   user: UserCreateOneInput!
+  team: TeamCreateOneInput!
 }
 
 """An edge in a connection."""
@@ -205,6 +207,7 @@ input PlayerUpdateInput {
   image: String
   updateAt: DateTime
   user: UserUpdateOneRequiredInput
+  team: TeamUpdateOneRequiredInput
 }
 
 input PlayerUpdateManyMutationInput {
@@ -510,6 +513,7 @@ input PlayerWhereInput {
   """All values greater than or equal the given value."""
   updateAt_gte: DateTime
   user: UserWhereInput
+  team: TeamWhereInput
 }
 
 input PlayerWhereUniqueInput {
@@ -565,6 +569,11 @@ input TeamCreateInput {
   name: String!
   updateAt: DateTime
   user: UserCreateOneInput!
+}
+
+input TeamCreateOneInput {
+  create: TeamCreateInput
+  connect: TeamWhereUniqueInput
 }
 
 """An edge in a connection."""
@@ -636,6 +645,13 @@ input TeamSubscriptionWhereInput {
   node: TeamWhereInput
 }
 
+input TeamUpdateDataInput {
+  city: String
+  name: String
+  updateAt: DateTime
+  user: UserUpdateOneRequiredInput
+}
+
 input TeamUpdateInput {
   city: String
   name: String
@@ -647,6 +663,18 @@ input TeamUpdateManyMutationInput {
   city: String
   name: String
   updateAt: DateTime
+}
+
+input TeamUpdateOneRequiredInput {
+  create: TeamCreateInput
+  connect: TeamWhereUniqueInput
+  update: TeamUpdateDataInput
+  upsert: TeamUpsertNestedInput
+}
+
+input TeamUpsertNestedInput {
+  update: TeamUpdateDataInput!
+  create: TeamCreateInput!
 }
 
 input TeamWhereInput {

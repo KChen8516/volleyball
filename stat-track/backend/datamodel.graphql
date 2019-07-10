@@ -36,7 +36,7 @@ type Player {
   createdAt: DateTime @createdAt
   updateAt: DateTime
   user: User!
-  # team: Team!
+  team: Team!
 }
 
 type Team {

@@ -14,6 +14,12 @@ const Mutations = {
       {
         data: {
           ...args,
+          team: {
+            connect: {
+              // teamId passed by AddPlayer component
+              id: args.team,
+            },
+          },
           // this is how you create a relationship between
           // user and player
           user: {

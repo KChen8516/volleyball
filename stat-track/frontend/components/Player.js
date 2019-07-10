@@ -14,7 +14,7 @@ export const Player = ({ player, toggleModal, setPlayer }) => {
             }}
           >
             <p className="card-header-title">
-              {player.firstName} {player.lastName}
+              {player.firstName} {player.lastName}, {player.team.name}
             </p>
           </Link>
           {/* <a href="#" className="card-header-icon" aria-label="more options">

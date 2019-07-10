@@ -17,6 +17,9 @@ export const ALL_PLAYERS_QUERY = gql`
       position
       number
       image
+      team {
+        name
+      }
     }
   }
 `;

@@ -6,10 +6,11 @@
  * info = info about the Query
  */
 const { forwardTo } = require("prisma-binding");
+const { hasPermission } = require("../utils");
 const Query = {
   // creates a players Query
   async players(parent, args, context, info) {
-    const players = await context.database.query.players();
+    const players = await context.database.query.players({}, info);
     return players;
   },
   // shortcut for prisma
@@ -21,6 +22,22 @@ const Query = {
     }
 
     return context.database.query.user({ where: { id: context.request.userId } }, info);
+  },
+  async teams(parent, args, context, info) {
+    const teams = await context.database.query.teams();
+    return teams;
+  },
+  async users(parent, args, context, info) {
+    // check if they are logged in
+    if (!context.request.userId) {
+      throw new Error("You must be logged in!");
+    }
+    // 1. check if the user has permissions to query all users
+    // pass the user's permissions and an array of permissions
+    // needed to pass the test
+    hasPermission(context.request.user, [ "ADMIN", "PERMISSIONUPDATE" ]);
+    // 2. if they do, query all the users
+    return context.database.query.users({}, info);
   },
 };
 
