@@ -7,6 +7,7 @@
  */
 const { forwardTo } = require("prisma-binding");
 const { hasPermission } = require("../utils");
+
 const Query = {
   // creates a players Query
   async players(parent, args, context, info) {
@@ -39,6 +40,7 @@ const Query = {
     // 2. if they do, query all the users
     return context.database.query.users({}, info);
   },
+  team: forwardTo("database"),
 };
 
 module.exports = Query;

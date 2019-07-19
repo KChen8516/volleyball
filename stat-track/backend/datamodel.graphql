@@ -36,7 +36,7 @@ type Player {
   createdAt: DateTime @createdAt
   updateAt: DateTime
   user: User!
-  team: Team!
+  team: Team! @relation(name: "Players")
 }
 
 type Team {
@@ -44,7 +44,7 @@ type Team {
   city: String
   name: String!
   user: User!
-  # players: [Player!]
+  players: [Player!]! @relation(name: "Players")
   createdAt: DateTime @createdAt
   updateAt: DateTime
 }

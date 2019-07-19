@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/kai-chen-2ef5a9/volley-track/dev
-# timestamp: Tue Jul 09 2019 16:49:09 GMT-0700 (Pacific Daylight Time)
+# timestamp: Wed Jul 10 2019 21:21:10 GMT-0700 (Pacific Daylight Time)
 
 type AggregatePlayer {
   count: Int!
@@ -118,7 +118,23 @@ input PlayerCreateInput {
   image: String
   updateAt: DateTime
   user: UserCreateOneInput!
-  team: TeamCreateOneInput!
+  team: TeamCreateOneWithoutPlayersInput!
+}
+
+input PlayerCreateManyWithoutTeamInput {
+  create: [PlayerCreateWithoutTeamInput!]
+  connect: [PlayerWhereUniqueInput!]
+}
+
+input PlayerCreateWithoutTeamInput {
+  id: ID
+  number: String!
+  position: String!
+  firstName: String!
+  lastName: String!
+  image: String
+  updateAt: DateTime
+  user: UserCreateOneInput!
 }
 
 """An edge in a connection."""
@@ -158,6 +174,301 @@ type PlayerPreviousValues {
   image: String
   createdAt: DateTime
   updateAt: DateTime
+}
+
+input PlayerScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [PlayerScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [PlayerScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [PlayerScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  number: String
+
+  """All values that are not equal to given value."""
+  number_not: String
+
+  """All values that are contained in given list."""
+  number_in: [String!]
+
+  """All values that are not contained in given list."""
+  number_not_in: [String!]
+
+  """All values less than the given value."""
+  number_lt: String
+
+  """All values less than or equal the given value."""
+  number_lte: String
+
+  """All values greater than the given value."""
+  number_gt: String
+
+  """All values greater than or equal the given value."""
+  number_gte: String
+
+  """All values containing the given string."""
+  number_contains: String
+
+  """All values not containing the given string."""
+  number_not_contains: String
+
+  """All values starting with the given string."""
+  number_starts_with: String
+
+  """All values not starting with the given string."""
+  number_not_starts_with: String
+
+  """All values ending with the given string."""
+  number_ends_with: String
+
+  """All values not ending with the given string."""
+  number_not_ends_with: String
+  position: String
+
+  """All values that are not equal to given value."""
+  position_not: String
+
+  """All values that are contained in given list."""
+  position_in: [String!]
+
+  """All values that are not contained in given list."""
+  position_not_in: [String!]
+
+  """All values less than the given value."""
+  position_lt: String
+
+  """All values less than or equal the given value."""
+  position_lte: String
+
+  """All values greater than the given value."""
+  position_gt: String
+
+  """All values greater than or equal the given value."""
+  position_gte: String
+
+  """All values containing the given string."""
+  position_contains: String
+
+  """All values not containing the given string."""
+  position_not_contains: String
+
+  """All values starting with the given string."""
+  position_starts_with: String
+
+  """All values not starting with the given string."""
+  position_not_starts_with: String
+
+  """All values ending with the given string."""
+  position_ends_with: String
+
+  """All values not ending with the given string."""
+  position_not_ends_with: String
+  firstName: String
+
+  """All values that are not equal to given value."""
+  firstName_not: String
+
+  """All values that are contained in given list."""
+  firstName_in: [String!]
+
+  """All values that are not contained in given list."""
+  firstName_not_in: [String!]
+
+  """All values less than the given value."""
+  firstName_lt: String
+
+  """All values less than or equal the given value."""
+  firstName_lte: String
+
+  """All values greater than the given value."""
+  firstName_gt: String
+
+  """All values greater than or equal the given value."""
+  firstName_gte: String
+
+  """All values containing the given string."""
+  firstName_contains: String
+
+  """All values not containing the given string."""
+  firstName_not_contains: String
+
+  """All values starting with the given string."""
+  firstName_starts_with: String
+
+  """All values not starting with the given string."""
+  firstName_not_starts_with: String
+
+  """All values ending with the given string."""
+  firstName_ends_with: String
+
+  """All values not ending with the given string."""
+  firstName_not_ends_with: String
+  lastName: String
+
+  """All values that are not equal to given value."""
+  lastName_not: String
+
+  """All values that are contained in given list."""
+  lastName_in: [String!]
+
+  """All values that are not contained in given list."""
+  lastName_not_in: [String!]
+
+  """All values less than the given value."""
+  lastName_lt: String
+
+  """All values less than or equal the given value."""
+  lastName_lte: String
+
+  """All values greater than the given value."""
+  lastName_gt: String
+
+  """All values greater than or equal the given value."""
+  lastName_gte: String
+
+  """All values containing the given string."""
+  lastName_contains: String
+
+  """All values not containing the given string."""
+  lastName_not_contains: String
+
+  """All values starting with the given string."""
+  lastName_starts_with: String
+
+  """All values not starting with the given string."""
+  lastName_not_starts_with: String
+
+  """All values ending with the given string."""
+  lastName_ends_with: String
+
+  """All values not ending with the given string."""
+  lastName_not_ends_with: String
+  image: String
+
+  """All values that are not equal to given value."""
+  image_not: String
+
+  """All values that are contained in given list."""
+  image_in: [String!]
+
+  """All values that are not contained in given list."""
+  image_not_in: [String!]
+
+  """All values less than the given value."""
+  image_lt: String
+
+  """All values less than or equal the given value."""
+  image_lte: String
+
+  """All values greater than the given value."""
+  image_gt: String
+
+  """All values greater than or equal the given value."""
+  image_gte: String
+
+  """All values containing the given string."""
+  image_contains: String
+
+  """All values not containing the given string."""
+  image_not_contains: String
+
+  """All values starting with the given string."""
+  image_starts_with: String
+
+  """All values not starting with the given string."""
+  image_not_starts_with: String
+
+  """All values ending with the given string."""
+  image_ends_with: String
+
+  """All values not ending with the given string."""
+  image_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updateAt: DateTime
+
+  """All values that are not equal to given value."""
+  updateAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updateAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updateAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updateAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updateAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updateAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updateAt_gte: DateTime
 }
 
 type PlayerSubscriptionPayload {
@@ -207,7 +518,16 @@ input PlayerUpdateInput {
   image: String
   updateAt: DateTime
   user: UserUpdateOneRequiredInput
-  team: TeamUpdateOneRequiredInput
+  team: TeamUpdateOneRequiredWithoutPlayersInput
+}
+
+input PlayerUpdateManyDataInput {
+  number: String
+  position: String
+  firstName: String
+  lastName: String
+  image: String
+  updateAt: DateTime
 }
 
 input PlayerUpdateManyMutationInput {
@@ -217,6 +537,44 @@ input PlayerUpdateManyMutationInput {
   lastName: String
   image: String
   updateAt: DateTime
+}
+
+input PlayerUpdateManyWithoutTeamInput {
+  create: [PlayerCreateWithoutTeamInput!]
+  connect: [PlayerWhereUniqueInput!]
+  set: [PlayerWhereUniqueInput!]
+  disconnect: [PlayerWhereUniqueInput!]
+  delete: [PlayerWhereUniqueInput!]
+  update: [PlayerUpdateWithWhereUniqueWithoutTeamInput!]
+  updateMany: [PlayerUpdateManyWithWhereNestedInput!]
+  deleteMany: [PlayerScalarWhereInput!]
+  upsert: [PlayerUpsertWithWhereUniqueWithoutTeamInput!]
+}
+
+input PlayerUpdateManyWithWhereNestedInput {
+  where: PlayerScalarWhereInput!
+  data: PlayerUpdateManyDataInput!
+}
+
+input PlayerUpdateWithoutTeamDataInput {
+  number: String
+  position: String
+  firstName: String
+  lastName: String
+  image: String
+  updateAt: DateTime
+  user: UserUpdateOneRequiredInput
+}
+
+input PlayerUpdateWithWhereUniqueWithoutTeamInput {
+  where: PlayerWhereUniqueInput!
+  data: PlayerUpdateWithoutTeamDataInput!
+}
+
+input PlayerUpsertWithWhereUniqueWithoutTeamInput {
+  where: PlayerWhereUniqueInput!
+  update: PlayerUpdateWithoutTeamDataInput!
+  create: PlayerCreateWithoutTeamInput!
 }
 
 input PlayerWhereInput {
@@ -549,6 +907,7 @@ type Team implements Node {
   city: String
   name: String!
   user: User!
+  players(where: PlayerWhereInput, orderBy: PlayerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Player!]
   createdAt: DateTime
   updateAt: DateTime
 }
@@ -569,11 +928,20 @@ input TeamCreateInput {
   name: String!
   updateAt: DateTime
   user: UserCreateOneInput!
+  players: PlayerCreateManyWithoutTeamInput
 }
 
-input TeamCreateOneInput {
-  create: TeamCreateInput
+input TeamCreateOneWithoutPlayersInput {
+  create: TeamCreateWithoutPlayersInput
   connect: TeamWhereUniqueInput
+}
+
+input TeamCreateWithoutPlayersInput {
+  id: ID
+  city: String
+  name: String!
+  updateAt: DateTime
+  user: UserCreateOneInput!
 }
 
 """An edge in a connection."""
@@ -645,18 +1013,12 @@ input TeamSubscriptionWhereInput {
   node: TeamWhereInput
 }
 
-input TeamUpdateDataInput {
-  city: String
-  name: String
-  updateAt: DateTime
-  user: UserUpdateOneRequiredInput
-}
-
 input TeamUpdateInput {
   city: String
   name: String
   updateAt: DateTime
   user: UserUpdateOneRequiredInput
+  players: PlayerUpdateManyWithoutTeamInput
 }
 
 input TeamUpdateManyMutationInput {
@@ -665,16 +1027,23 @@ input TeamUpdateManyMutationInput {
   updateAt: DateTime
 }
 
-input TeamUpdateOneRequiredInput {
-  create: TeamCreateInput
+input TeamUpdateOneRequiredWithoutPlayersInput {
+  create: TeamCreateWithoutPlayersInput
   connect: TeamWhereUniqueInput
-  update: TeamUpdateDataInput
-  upsert: TeamUpsertNestedInput
+  update: TeamUpdateWithoutPlayersDataInput
+  upsert: TeamUpsertWithoutPlayersInput
 }
 
-input TeamUpsertNestedInput {
-  update: TeamUpdateDataInput!
-  create: TeamCreateInput!
+input TeamUpdateWithoutPlayersDataInput {
+  city: String
+  name: String
+  updateAt: DateTime
+  user: UserUpdateOneRequiredInput
+}
+
+input TeamUpsertWithoutPlayersInput {
+  update: TeamUpdateWithoutPlayersDataInput!
+  create: TeamCreateWithoutPlayersInput!
 }
 
 input TeamWhereInput {
@@ -851,6 +1220,9 @@ input TeamWhereInput {
   """All values greater than or equal the given value."""
   updateAt_gte: DateTime
   user: UserWhereInput
+  players_every: PlayerWhereInput
+  players_some: PlayerWhereInput
+  players_none: PlayerWhereInput
 }
 
 input TeamWhereUniqueInput {

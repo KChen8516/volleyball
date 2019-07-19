@@ -40,4 +40,5 @@ type Query {
   teams: [Team]!
   # array is required but can be empty
   users: [User]!
+  team(where: TeamWhereUniqueInput!): Team
 }
