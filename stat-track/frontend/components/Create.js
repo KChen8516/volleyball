@@ -4,8 +4,11 @@ import styled from "styled-components";
 import { RestrictSignIn } from "./RestrictSignIn";
 import { PlayerForm } from "./AddPlayer";
 import { TeamForm } from "./AddTeam";
+import { GameForm } from "./AddGame";
 
 const Container = styled.div`padding: 0 32px;`;
+
+const TopPadding = styled.div`padding-top: 10px;`;
 
 export const CreateTabs = () => {
   const [ currentTab, setCurrentTab ] = useState("player");
@@ -33,8 +36,11 @@ export const CreateTabs = () => {
           </li>
         </ul>
       </Container>
-      {currentTab === "player" && <PlayerForm />}
-      {currentTab === "team" && <TeamForm />}
+      <TopPadding className="container is-fluid">
+        {currentTab === "player" && <PlayerForm />}
+        {currentTab === "team" && <TeamForm />}
+        {currentTab === "game" && <GameForm />}
+      </TopPadding>
     </RestrictSignIn>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import styled from "styled-components";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
@@ -31,15 +31,12 @@ export const TeamForm = () => {
       case "name":
         setName(val);
         break;
-      //   case "players":
-      //     setPosition(val);
-      //     break;
       default:
         return;
     }
   };
 
-  const onSubmitPlayer = async (mutation) => {
+  const onSubmitTeam = async (mutation) => {
     const res = await mutation();
 
     Router.push({
@@ -51,7 +48,7 @@ export const TeamForm = () => {
   return (
     <Mutation mutation={CREATE_TEAM_MUTATION} variables={{ name, city, players: [] }}>
       {(createTeam, { error, loading }) => (
-        <TopPadding className="container is-fluid">
+        <Fragment>
           <Error error={error} />
           <fieldset disabled={loading} aria-busy={loading}>
             <h2 className="title is-2">Create a Team</h2>
@@ -82,43 +79,23 @@ export const TeamForm = () => {
                 />
               </div>
             </div>
-            {/* <div className="field">
-              <label className="label">Position</label>
-              <div className="control">
-                <div className="select">
-                  <select
-                    defaultValue={`Please Select a Position`}
-                    value={position}
-                    name="position"
-                    onChange={handleFormUpdate}
-                  >
-                    <option disabled>Please Select a Position</option>
-                    <option>Outside</option>
-                    <option>Opposite</option>
-                    <option>Libero</option>
-                  </select>
-                </div>
-              </div>
-            </div> */}
-            <TopPadding>
-              <div className="field is-grouped">
-                <p className="control">
-                  <a
-                    className="button is-primary"
-                    onClick={() => {
-                      onSubmitPlayer(createTeam);
-                    }}
-                  >
-                    Submit
-                  </a>
-                </p>
-                <p className="control">
-                  <a className="button is-light">Clear</a>
-                </p>
-              </div>
+            <TopPadding className="field is-grouped">
+              <p className="control">
+                <a
+                  className="button is-primary"
+                  onClick={() => {
+                    onSubmitTeam(createTeam);
+                  }}
+                >
+                  Submit
+                </a>
+              </p>
+              <p className="control">
+                <a className="button is-light">Clear</a>
+              </p>
             </TopPadding>
           </fieldset>
-        </TopPadding>
+        </Fragment>
       )}
     </Mutation>
   );

@@ -1,6 +1,12 @@
-import React from "react";
+import React, { Fragment } from "react";
+import styled from "styled-components";
 import PropTypes from "prop-types";
 import Link from "next/link";
+
+const CardHeaderContainer = styled.div`
+  flex-direction: column;
+  align-items: flex-start;
+`;
 
 export const Player = ({ player, toggleModal, setPlayer }) => {
   return (
@@ -13,9 +19,12 @@ export const Player = ({ player, toggleModal, setPlayer }) => {
               query: { id: player.id },
             }}
           >
-            <p className="card-header-title">
-              {player.firstName} {player.lastName}, {player.team.name}
-            </p>
+            <CardHeaderContainer className="card-header-title">
+              <p>
+                {player.firstName} {player.lastName}
+              </p>
+              <p className="subtitle is-6">{player.team.name}</p>
+            </CardHeaderContainer>
           </Link>
           {/* <a href="#" className="card-header-icon" aria-label="more options">
             <span className="icon">

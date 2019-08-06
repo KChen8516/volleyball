@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import styled from "styled-components";
 import { Mutation, Query } from "react-apollo";
 import gql from "graphql-tag";
@@ -6,7 +6,7 @@ import Router from "next/router";
 
 import Error from "./ErrorMessage";
 
-const ALL_TEAMS_QUERY = gql`
+export const ALL_TEAMS_QUERY = gql`
   query ALL_TEAMS_QUERY {
     teams {
       id
@@ -89,7 +89,7 @@ export const PlayerForm = () => {
             variables={{ firstName, lastName, number, position, team: teamId }}
           >
             {(createPlayer, { error, loading }) => (
-              <TopPadding className="container is-fluid">
+              <Fragment>
                 <Error error={error} />
                 <fieldset disabled={loading} aria-busy={loading}>
                   <h2 className="title is-2">Create a Player</h2>
@@ -131,9 +131,11 @@ export const PlayerForm = () => {
                           onChange={handleFormUpdate}
                         >
                           <option disabled>Please Select a Position</option>
-                          <option>Outside</option>
-                          <option>Opposite</option>
                           <option>Libero</option>
+                          <option>Middle</option>
+                          <option>Opposite</option>
+                          <option>Outside</option>
+                          <option>Setter</option>
                         </select>
                       </div>
                     </div>
@@ -175,25 +177,23 @@ export const PlayerForm = () => {
                       </span>
                     </p>
                   </div>
-                  <TopPadding>
-                    <div className="field is-grouped">
-                      <p className="control">
-                        <a
-                          className="button is-primary"
-                          onClick={() => {
-                            onSubmitPlayer(createPlayer);
-                          }}
-                        >
-                          Submit
-                        </a>
-                      </p>
-                      <p className="control">
-                        <a className="button is-light">Clear</a>
-                      </p>
-                    </div>
+                  <TopPadding className="field is-grouped">
+                    <p className="control">
+                      <a
+                        className="button is-primary"
+                        onClick={() => {
+                          onSubmitPlayer(createPlayer);
+                        }}
+                      >
+                        Submit
+                      </a>
+                    </p>
+                    <p className="control">
+                      <a className="button is-light">Clear</a>
+                    </p>
                   </TopPadding>
                 </fieldset>
-              </TopPadding>
+              </Fragment>
             )}
           </Mutation>
         );

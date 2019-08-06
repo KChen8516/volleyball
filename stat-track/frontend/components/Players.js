@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 import { Player } from "./Player";
 import { DeletePlayerModal } from "./DeletePlayerModal";
+import Error from "./ErrorMessage";
 
 const Container = styled.div`padding: 10px 32px 0 32px;`;
 
@@ -28,10 +29,10 @@ export const Players = (props) => {
   const [ isActive, setIsActive ] = useState(false);
   const [ player, setPlayer ] = useState();
   return (
-    <Query query={ALL_PLAYERS_QUERY}>
+    <Query query={ALL_PLAYERS_QUERY} fetchPolicy="network-only">
       {({ data, error, loading }) => {
         if (loading) return <p>Loading...</p>;
-        if (error) return <p>Error: {error.message}</p>;
+        if (error) return <Error error={error} />;
 
         const { players } = data;
 
