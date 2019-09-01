@@ -48,3 +48,28 @@ type Team {
   createdAt: DateTime @createdAt
   updateAt: DateTime
 }
+
+type Game {
+  id: ID! @id
+  homeTeamId: ID!
+  stats: [Stat!]
+  user: User
+  opposingTeam: String
+  homeScore: String
+  opponentScore: String
+  homeTeam: String
+  createdAt: DateTime @createdAt
+  updateAt: DateTime
+}
+
+type Stat {
+  id: ID! @id
+  playerId: String!
+  teamId: String!
+  gameId: String!
+  action: String!
+  result: String!
+  playerName: String
+  createdAt: DateTime @createdAt
+  updateAt: DateTime
+}

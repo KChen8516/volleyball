@@ -138,6 +138,22 @@ const Mutations = {
     context.response.clearCookie("token");
     return { message: "You've been successfully sign out!" };
   },
+  async createGame(parent, args, context, info) {
+    let payload = { data: { ...args } };
+
+    // optionally include a user if one is logged in
+    if (context.request.userId) {
+      payload.data.user = { connect: { id: context.request.userId } };
+    }
+    const game = await context.database.mutation.createGame(payload, info);
+
+    // optionally include a user if one is logged in
+    // if (context.request.userId) {
+    //   game.data["user"] = { connect: { id: context.request.userId } };
+    // }
+
+    return game;
+  },
 };
 
 module.exports = Mutations;

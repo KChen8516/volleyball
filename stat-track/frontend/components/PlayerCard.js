@@ -11,19 +11,22 @@ const StatTitle = styled.h5`
 
 const StatRow = styled.div`margin-bottom: 1rem;`;
 
-export const PlayerCard = ({
-  player: { firstName, lastName, id, number, position },
-  onStatChange,
-}) => {
+export const PlayerCard = ({ player, onStatChange, toggleModal, setActivePlayer }) => {
   const createGameStat = (action, result) => {
+    const { firstName, lastName, id } = player;
     onStatChange({ playerId: id, firstName, lastName, action, result });
   };
+
   return (
     <div className="card">
       <header className="card-header">
-        <p className="card-header-title">
-          {`${firstName} ${lastName} #${number}, ${position}`}
-        </p>
+        <p
+          className="card-header-title"
+          onClick={() => {
+            toggleModal(true);
+            setActivePlayer(player);
+          }}
+        >{`${player.firstName} ${player.lastName} #${player.number}`}</p>
         {/* <a href="#" className="card-header-icon" aria-label="more options">
           <span className="icon">
             <i className="fas fa-angle-down" aria-hidden="true" />

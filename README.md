@@ -13,10 +13,11 @@
 
 ## Features
 - [X] User should be able to create/edit/delete a player
-- [ ] User should be able to create/edit/delete a team of players
-- [ ] User should be able to keep track of the score of a match/game
-- [ ] User should be able to record serves, blocks, passes, and kills/attempts for each player
+- [X] User should be able to create/edit/delete a team of players
+- [X] User should be able to record serves, blocks, passes, and kills/attempts for each player
+- [ ] User should be able to view individual highlights of a player during a game
 - [ ] User should be able to see a history of actions during a game
+- [ ] User should be able to keep track of the score of a match/game
 
 ## Running Frontend
 ```

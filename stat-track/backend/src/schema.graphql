@@ -29,6 +29,7 @@ type Mutation {
   signin(email: String!, password: String!): User!
   # custom type
   signout: SuccessMessage
+  createGame(homeTeamId: ID!, opposingTeam: String, homeTeam: String): Game!
 }
 
 type Query {
@@ -41,4 +42,5 @@ type Query {
   # array is required but can be empty
   users: [User]!
   team(where: TeamWhereUniqueInput!): Team
+  games: [Game]!
 }

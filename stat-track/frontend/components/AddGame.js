@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import styled from "styled-components";
 import { Query, Mutation } from "react-apollo";
 import gql from "graphql-tag";
@@ -7,104 +7,54 @@ import Router from "next/router";
 import Error from "./ErrorMessage";
 import { ALL_TEAMS_QUERY } from "./AddPlayer";
 
-// const CREATE_GAME_MUTATION = gql`
-//   mutation CREATE_GAME_MUTATION($teamName: String!, $teamId: String!, $opponent: String) {
-//     createGame(teamName: $teamName, teamId: $teamId, opponent: $opponent) {
-//       id
-//     }
-//   }
-// `;
+const CREATE_GAME_MUTATION = gql`
+  mutation CREATE_GAME_MUTATION($homeTeamId: ID!, $opponent: String) {
+    createGame(homeTeamId: $homeTeamId, opposingTeam: $opponent) {
+      id
+      homeTeamId
+      homeTeam
+    }
+  }
+`;
 
-// const TopPadding = styled.div`padding-top: 10px;`;
+const TopPadding = styled.div`padding-top: 10px;`;
+
+const QuarterField = styled.div`width: 25%;`;
 
 export const GameForm = () => {
-  const [ teamName, setTeamName ] = useState();
+  const [ homeTeamId, setHomeTeamId ] = useState();
   const [ opponentName, setOpponentName ] = useState();
 
   const handleFormUpdate = (e) => {
-    const { name, type, value } = e.target;
+    const { name, value } = e.target;
 
-    const val = type === "number" ? parseFloat(value) : value;
     switch (name) {
-      case "city":
-        setCity(val);
+      case "homeTeam":
+        setHomeTeamId(value);
         break;
-      case "name":
-        setName(val);
+      case "opponentTeam":
+        setOpponentName(value);
         break;
       default:
         return;
     }
   };
 
-  const onSubmitTeam = async (mutation) => {
+  const onSubmitGame = async (mutation) => {
+    console.log({ homeTeamId, opponentName });
     const res = await mutation();
-
+    console.log(res.data);
     Router.push({
-      pathname: "/team",
-      query: { id: res.data.createTeam.id },
+      pathname: "/game",
+      query: { id: res.data.createGame.id, homeTeamId: res.data.createGame.homeTeamId },
     });
   };
 
   return (
-    // <Mutation mutation={CREATE_TEAM_MUTATION} variables={{ name, city, players: [] }}>
-    //   {(createTeam, { error, loading }) => (
-    //     <TopPadding className="container is-fluid">
-    //       <Error error={error} />
-    //       <fieldset disabled={loading} aria-busy={loading}>
-    //         <h2 className="title is-2">Create a Team</h2>
-    //         <div className="field">
-    //           <label className="label">Team Name</label>
-    //           <div className="control">
-    //             <input
-    //               className="input"
-    //               name="name"
-    //               type="text"
-    //               placeholder="e.g Alex Smith"
-    //               value={name}
-    //               onChange={handleFormUpdate}
-    //             />
-    //           </div>
-    //         </div>
-
-    //         <div className="field">
-    //           <label className="label">City</label>
-    //           <div className="control">
-    //             <input
-    //               className="input"
-    //               name="city"
-    //               type="text"
-    //               placeholder="e.g. Santa Clara"
-    //               value={city}
-    //               onChange={handleFormUpdate}
-    //             />
-    //           </div>
-    //         </div>
-    //         <TopPadding>
-    //           <div className="field is-grouped">
-    //             <p className="control">
-    //               <a
-    //                 className="button is-primary"
-    //                 onClick={() => {
-    //                   onSubmitTeam(createTeam);
-    //                 }}
-    //               >
-    //                 Submit
-    //               </a>
-    //             </p>
-    //             <p className="control">
-    //               <a className="button is-light">Clear</a>
-    //             </p>
-    //           </div>
-    //         </TopPadding>
-    //       </fieldset>
-    //     </TopPadding>
-    //   )}
-    // </Mutation>
     <Query query={ALL_TEAMS_QUERY}>
       {({ data, loading, error }) => {
         const { teams } = data;
-        console.log("ADDGAME", { teams });
+
         if (loading) {
           return <h1>Loading...</h1>;
         }
@@ -112,7 +62,77 @@ export const GameForm = () => {
         if (error) {
           return <Error error={error} />;
         }
-        return <h1>Game Form</h1>;
+
+        return (
+          <Mutation
+            mutation={CREATE_GAME_MUTATION}
+            variables={{ homeTeamId, opponentName }}
+          >
+            {(createGame, { error, loading }) => (
+              <Fragment>
+                <Error error={error} />
+                <fieldset disabled={loading} aria-busy={loading}>
+                  <h2 className="title is-2">Create a Game</h2>
+
+                  <div className="field">
+                    <label className="label">Home Team</label>
+                    <div className="control">
+                      <div className="select">
+                        <select
+                          defaultValue={`Please Select a Team`}
+                          // value={homeTeamName}
+                          name="homeTeam"
+                          onChange={handleFormUpdate}
+                        >
+                          <option disabled key="key">
+                            Please Select a Team
+                          </option>
+                          {teams.map((team) => (
+                            <option key={team.id} value={team.id}>
+                              {team.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <QuarterField className="field">
+                    <label className="label">Opposing Team</label>
+                    <div className="control">
+                      <input
+                        className="input"
+                        name="opponentTeam"
+                        type="text"
+                        placeholder="e.g. James Logan High School"
+                        value={opponentName}
+                        onChange={handleFormUpdate}
+                      />
+                    </div>
+                  </QuarterField>
+
+                  <TopPadding>
+                    <div className="field is-grouped">
+                      <p className="control">
+                        <a
+                          className="button is-primary"
+                          onClick={() => {
+                            onSubmitGame(createGame);
+                          }}
+                        >
+                          Submit
+                        </a>
+                      </p>
+                      <p className="control">
+                        <a className="button is-light">Clear</a>
+                      </p>
+                    </div>
+                  </TopPadding>
+                </fieldset>
+              </Fragment>
+            )}
+          </Mutation>
+        );
       }}
     </Query>
   );

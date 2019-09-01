@@ -41,6 +41,10 @@ const Query = {
     return context.database.query.users({}, info);
   },
   team: forwardTo("database"),
+  async games(parent, args, context, info) {
+    const games = await context.database.query.games();
+    return games;
+  },
 };
 
 module.exports = Query;
