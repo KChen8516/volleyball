@@ -48,8 +48,8 @@ export const Nav = () => (
               <Link href="/players">
                 <a className="navbar-item">Players</a>
               </Link>
-              <Link href="/game">
-                <a className="navbar-item">New Game</a>
+              <Link href="/games">
+                <a className="navbar-item">Games Log</a>
               </Link>
             </div>
 

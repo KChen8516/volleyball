@@ -10,14 +10,19 @@ export const PlayerStatsModal = ({ isActive, toggleModal, stats, activePlayer = 
   const filterPlayerStats = (stats) => {
     if (!stats) return null;
     console.log({ stats });
+    console.log({ activePlayer });
+    console.log(stats.filter((stat) => stat.playerId === activePlayer.id));
+    return stats.filter((stat) => stat.playerId === activePlayer.id).reverse();
   };
 
   const renderPlayerStats = (stats) => {
     if (!stats) return null;
 
-    filterPlayerStats(stats);
+    const filteredStats = filterPlayerStats(stats);
 
-    return stats.map((stat) => (
+    console.log({ filteredStats });
+
+    return filteredStats.map((stat) => (
       <tr>
         <th>{stat.action}</th>
         <td>{stat.result}</td>

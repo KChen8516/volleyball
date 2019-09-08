@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
+import Router from "next/router";
 
 import { PlayerCard } from "./PlayerCard";
 import { PlayerStatsModal } from "./PlayerStatsModal";
+import Error from "./ErrorMessage";
 
 const Container = styled.div`padding: 32px 32px 0 32px;`;
 
@@ -33,54 +35,6 @@ const Container = styled.div`padding: 32px 32px 0 32px;`;
   * }
   */
 
-// const playerA = {
-//   id: "123",
-//   firstName: "Matt",
-//   lastName: "Anderson",
-//   number: "1",
-//   position: "Opposite",
-// };
-
-// const playerB = {
-//   id: "123",
-//   firstName: "Aaron",
-//   lastName: "Russell",
-//   number: "2",
-//   position: "Outside",
-// };
-
-// const playerC = {
-//   id: "123",
-//   firstName: "Erik",
-//   lastName: "Shoji",
-//   number: "22",
-//   position: "Libero",
-// };
-
-// const playerD = {
-//   id: "123",
-//   firstName: "Taylor",
-//   lastName: "Sander",
-//   number: "3",
-//   position: "Outside",
-// };
-
-// const playerE = {
-//   id: "123",
-//   firstName: "Micah",
-//   lastName: "C.",
-//   number: "11",
-//   position: "Setter",
-// };
-
-// const playerF = {
-//   id: "123",
-//   firstName: "Max",
-//   lastName: "Holt",
-//   number: "12",
-//   position: "Middle",
-// };
-
 const SINGLE_TEAM_QUERY = gql`
   query SINGLE_TEAM_QUERY($id: ID!) {
     team(where: { id: $id }) {
@@ -96,25 +50,23 @@ const SINGLE_TEAM_QUERY = gql`
   }
 `;
 
-// const UPDATE_GAME_MUTATION = gql`
-//   mutation UPDATE_GAME_MUTATION(
-//     $id: ID!
-//     $number: String
-//     $position: String
-//     $firstName: String
-//     $lastName: String
-//   ) {
-//     updatePlayer(
-//       id: $id
-//       number: $number
-//       lastName: $lastName
-//       firstName: $firstName
-//       position: $position
-//     ) {
-//       id
-//     }
-//   }
-// `;
+const UPDATE_GAME_MUTATION = gql`
+  mutation UPDATE_GAME_MUTATION(
+    $id: ID!
+    $homeScore: String
+    $opponentScore: String
+    $stats: [StatCreateWithoutGameInput]!
+  ) {
+    updateGame(
+      id: $id
+      stats: $stats
+      homeScore: $homeScore
+      opponentScore: $opponentScore
+    ) {
+      id
+    }
+  }
+`;
 
 export const GameScreen = ({ gameId, homeTeamId }) => {
   const [ stats, setStats ] = useState([]);
@@ -122,8 +74,15 @@ export const GameScreen = ({ gameId, homeTeamId }) => {
   const [ activePlayer, setActivePlayer ] = useState();
 
   const recordStat = ({ playerId, firstName, lastName, action, result }) => {
-    console.log("STAT RECORDED >>>", { playerId, firstName, lastName, action, result });
-    setStats((stats) => stats.concat({ playerId, firstName, lastName, action, result }));
+    setStats((stats) =>
+      stats.concat({
+        team: homeTeamId,
+        player: playerId,
+        playerName: `${firstName} ${lastName}`,
+        action,
+        result,
+      }),
+    );
   };
 
   const renderPlayerCards = (players) => {
@@ -138,6 +97,7 @@ export const GameScreen = ({ gameId, homeTeamId }) => {
               onStatChange={recordStat}
               toggleModal={setIsActive}
               setActivePlayer={setActivePlayer}
+              team={players}
             />
           </div>,
         );
@@ -152,6 +112,7 @@ export const GameScreen = ({ gameId, homeTeamId }) => {
               onStatChange={recordStat}
               toggleModal={setIsActive}
               setActivePlayer={setActivePlayer}
+              team={players}
             />
           </div>,
         );
@@ -161,17 +122,20 @@ export const GameScreen = ({ gameId, homeTeamId }) => {
     return cards;
   };
 
-  const submitGame = () => {
-    console.log("CURRENT STATS >>>", stats);
-    console.log({ gameId, homeTeamId });
+  const submitGame = async (updateGameMutation) => {
+    const res = await updateGameMutation();
+    console.log(res.data);
+    // go to the games collection screen for the team
+    Router.push({
+      pathname: "/games",
+      query: { id: res.data.updateGame.id },
+    });
   };
 
   return (
     <Query query={SINGLE_TEAM_QUERY} variables={{ id: homeTeamId }}>
       {({ data, loading, error }) => {
         const { team: { players, name } } = data;
-
-        console.log("TEAM DATA >>>", { players, name });
 
         if (loading) {
           return <h1>Loading...</h1>;
@@ -182,26 +146,44 @@ export const GameScreen = ({ gameId, homeTeamId }) => {
         }
 
         return (
-          <Container>
-            {/* <h2 className="title is-2">Current Roster</h2> */}
-            <div className="columns is-multiline is-mobile">
-              {renderPlayerCards(players)}
-            </div>
-            <div className="field is-grouped">
-              <p className="control" onClick={submitGame}>
-                <a className="button is-link">Save Game</a>
-              </p>
-              <p className="control">
-                <a className="button is-danger">New Game</a>
-              </p>
-            </div>
-            <PlayerStatsModal
-              isActive={isActive}
-              toggleModal={setIsActive}
-              stats={stats}
-              activePlayer={activePlayer}
-            />
-          </Container>
+          <Mutation
+            mutation={UPDATE_GAME_MUTATION}
+            variables={{
+              id: gameId,
+              homeTeamId,
+              stats,
+              homeTeam: name,
+            }}
+          >
+            {(updateGame, { error, loading }) => {
+              if (error) {
+                return <Error error={error} />;
+              }
+
+              return (
+                <Container>
+                  {/* <h2 className="title is-2">Current Roster</h2> */}
+                  <div className="columns is-multiline is-mobile">
+                    {renderPlayerCards(players)}
+                  </div>
+                  <div className="field is-grouped">
+                    <p className="control" onClick={() => submitGame(updateGame)}>
+                      <a className="button is-link">Save Game</a>
+                    </p>
+                    <p className="control">
+                      <a className="button is-danger">New Game</a>
+                    </p>
+                  </div>
+                  <PlayerStatsModal
+                    isActive={isActive}
+                    toggleModal={setIsActive}
+                    stats={stats}
+                    activePlayer={activePlayer}
+                  />
+                </Container>
+              );
+            }}
+          </Mutation>
         );
       }}
     </Query>

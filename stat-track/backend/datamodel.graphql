@@ -52,21 +52,21 @@ type Team {
 type Game {
   id: ID! @id
   homeTeamId: ID!
-  stats: [Stat!]
+  stats: [Stat!] @relation(name: "GameStats")
   user: User
   opposingTeam: String
+  homeTeam: String
   homeScore: String
   opponentScore: String
-  homeTeam: String
   createdAt: DateTime @createdAt
   updateAt: DateTime
 }
 
 type Stat {
   id: ID! @id
-  playerId: String!
-  teamId: String!
-  gameId: String!
+  game: Game! @relation(name: "GameStats")
+  player: String!
+  team: String!
   action: String!
   result: String!
   playerName: String

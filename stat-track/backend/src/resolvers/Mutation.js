@@ -139,7 +139,7 @@ const Mutations = {
     return { message: "You've been successfully sign out!" };
   },
   async createGame(parent, args, context, info) {
-    let payload = { data: { ...args } };
+    let payload = { data: { ...args, stats: [] } };
 
     // optionally include a user if one is logged in
     if (context.request.userId) {
@@ -153,6 +153,30 @@ const Mutations = {
     // }
 
     return game;
+  },
+  updateGame(parent, args, context, info) {
+    // make a shallow copy
+    const updates = { ...args };
+    // remove the id from updates
+    delete updates.id;
+
+    // TODO: fix the relationship between stats and games so that both can be fetched indepdently
+    console.log({ updates }, updates.stats);
+
+    // run the generated update method
+    return context.database.mutation.updateGame(
+      {
+        where: {
+          id: args.id,
+        },
+        data: {
+          stats: {
+            create: updates.stats,
+          },
+        },
+      },
+      info,
+    );
   },
 };
 

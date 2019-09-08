@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/kai-chen-2ef5a9/volley-track/dev
-# timestamp: Thu Aug 22 2019 18:26:33 GMT-0700 (Pacific Daylight Time)
+# timestamp: Sat Sep 07 2019 17:56:14 GMT-0700 (Pacific Daylight Time)
 
 type AggregateGame {
   count: Int!
@@ -34,9 +34,9 @@ type Game implements Node {
   stats(where: StatWhereInput, orderBy: StatOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Stat!]
   user: User
   opposingTeam: String
+  homeTeam: String
   homeScore: String
   opponentScore: String
-  homeTeam: String
   createdAt: DateTime
   updateAt: DateTime
 }
@@ -55,11 +55,27 @@ input GameCreateInput {
   id: ID
   homeTeamId: ID!
   opposingTeam: String
+  homeTeam: String
   homeScore: String
   opponentScore: String
-  homeTeam: String
   updateAt: DateTime
-  stats: StatCreateManyInput
+  stats: StatCreateManyWithoutGameInput
+  user: UserCreateOneInput
+}
+
+input GameCreateOneWithoutStatsInput {
+  create: GameCreateWithoutStatsInput
+  connect: GameWhereUniqueInput
+}
+
+input GameCreateWithoutStatsInput {
+  id: ID
+  homeTeamId: ID!
+  opposingTeam: String
+  homeTeam: String
+  homeScore: String
+  opponentScore: String
+  updateAt: DateTime
   user: UserCreateOneInput
 }
 
@@ -79,12 +95,12 @@ enum GameOrderByInput {
   homeTeamId_DESC
   opposingTeam_ASC
   opposingTeam_DESC
+  homeTeam_ASC
+  homeTeam_DESC
   homeScore_ASC
   homeScore_DESC
   opponentScore_ASC
   opponentScore_DESC
-  homeTeam_ASC
-  homeTeam_DESC
   createdAt_ASC
   createdAt_DESC
   updateAt_ASC
@@ -95,9 +111,9 @@ type GamePreviousValues {
   id: ID!
   homeTeamId: ID!
   opposingTeam: String
+  homeTeam: String
   homeScore: String
   opponentScore: String
-  homeTeam: String
   createdAt: DateTime
   updateAt: DateTime
 }
@@ -144,21 +160,43 @@ input GameSubscriptionWhereInput {
 input GameUpdateInput {
   homeTeamId: ID
   opposingTeam: String
+  homeTeam: String
   homeScore: String
   opponentScore: String
-  homeTeam: String
   updateAt: DateTime
-  stats: StatUpdateManyInput
+  stats: StatUpdateManyWithoutGameInput
   user: UserUpdateOneInput
 }
 
 input GameUpdateManyMutationInput {
   homeTeamId: ID
   opposingTeam: String
+  homeTeam: String
   homeScore: String
   opponentScore: String
-  homeTeam: String
   updateAt: DateTime
+}
+
+input GameUpdateOneRequiredWithoutStatsInput {
+  create: GameCreateWithoutStatsInput
+  connect: GameWhereUniqueInput
+  update: GameUpdateWithoutStatsDataInput
+  upsert: GameUpsertWithoutStatsInput
+}
+
+input GameUpdateWithoutStatsDataInput {
+  homeTeamId: ID
+  opposingTeam: String
+  homeTeam: String
+  homeScore: String
+  opponentScore: String
+  updateAt: DateTime
+  user: UserUpdateOneInput
+}
+
+input GameUpsertWithoutStatsInput {
+  update: GameUpdateWithoutStatsDataInput!
+  create: GameCreateWithoutStatsInput!
 }
 
 input GameWhereInput {
@@ -290,6 +328,46 @@ input GameWhereInput {
 
   """All values not ending with the given string."""
   opposingTeam_not_ends_with: String
+  homeTeam: String
+
+  """All values that are not equal to given value."""
+  homeTeam_not: String
+
+  """All values that are contained in given list."""
+  homeTeam_in: [String!]
+
+  """All values that are not contained in given list."""
+  homeTeam_not_in: [String!]
+
+  """All values less than the given value."""
+  homeTeam_lt: String
+
+  """All values less than or equal the given value."""
+  homeTeam_lte: String
+
+  """All values greater than the given value."""
+  homeTeam_gt: String
+
+  """All values greater than or equal the given value."""
+  homeTeam_gte: String
+
+  """All values containing the given string."""
+  homeTeam_contains: String
+
+  """All values not containing the given string."""
+  homeTeam_not_contains: String
+
+  """All values starting with the given string."""
+  homeTeam_starts_with: String
+
+  """All values not starting with the given string."""
+  homeTeam_not_starts_with: String
+
+  """All values ending with the given string."""
+  homeTeam_ends_with: String
+
+  """All values not ending with the given string."""
+  homeTeam_not_ends_with: String
   homeScore: String
 
   """All values that are not equal to given value."""
@@ -370,46 +448,6 @@ input GameWhereInput {
 
   """All values not ending with the given string."""
   opponentScore_not_ends_with: String
-  homeTeam: String
-
-  """All values that are not equal to given value."""
-  homeTeam_not: String
-
-  """All values that are contained in given list."""
-  homeTeam_in: [String!]
-
-  """All values that are not contained in given list."""
-  homeTeam_not_in: [String!]
-
-  """All values less than the given value."""
-  homeTeam_lt: String
-
-  """All values less than or equal the given value."""
-  homeTeam_lte: String
-
-  """All values greater than the given value."""
-  homeTeam_gt: String
-
-  """All values greater than or equal the given value."""
-  homeTeam_gte: String
-
-  """All values containing the given string."""
-  homeTeam_contains: String
-
-  """All values not containing the given string."""
-  homeTeam_not_contains: String
-
-  """All values starting with the given string."""
-  homeTeam_starts_with: String
-
-  """All values not starting with the given string."""
-  homeTeam_not_starts_with: String
-
-  """All values ending with the given string."""
-  homeTeam_ends_with: String
-
-  """All values not ending with the given string."""
-  homeTeam_not_ends_with: String
   createdAt: DateTime
 
   """All values that are not equal to given value."""
@@ -1360,9 +1398,9 @@ type Query {
 
 type Stat implements Node {
   id: ID!
-  playerId: String!
-  teamId: String!
-  gameId: String!
+  game: Game!
+  player: String!
+  team: String!
   action: String!
   result: String!
   playerName: String
@@ -1382,18 +1420,28 @@ type StatConnection {
 
 input StatCreateInput {
   id: ID
-  playerId: String!
-  teamId: String!
-  gameId: String!
+  player: String!
+  team: String!
   action: String!
   result: String!
   playerName: String
   updateAt: DateTime
+  game: GameCreateOneWithoutStatsInput!
 }
 
-input StatCreateManyInput {
-  create: [StatCreateInput!]
+input StatCreateManyWithoutGameInput {
+  create: [StatCreateWithoutGameInput!]
   connect: [StatWhereUniqueInput!]
+}
+
+input StatCreateWithoutGameInput {
+  id: ID
+  player: String!
+  team: String!
+  action: String!
+  result: String!
+  playerName: String
+  updateAt: DateTime
 }
 
 """An edge in a connection."""
@@ -1408,12 +1456,10 @@ type StatEdge {
 enum StatOrderByInput {
   id_ASC
   id_DESC
-  playerId_ASC
-  playerId_DESC
-  teamId_ASC
-  teamId_DESC
-  gameId_ASC
-  gameId_DESC
+  player_ASC
+  player_DESC
+  team_ASC
+  team_DESC
   action_ASC
   action_DESC
   result_ASC
@@ -1428,9 +1474,8 @@ enum StatOrderByInput {
 
 type StatPreviousValues {
   id: ID!
-  playerId: String!
-  teamId: String!
-  gameId: String!
+  player: String!
+  team: String!
   action: String!
   result: String!
   playerName: String
@@ -1487,126 +1532,86 @@ input StatScalarWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  playerId: String
+  player: String
 
   """All values that are not equal to given value."""
-  playerId_not: String
+  player_not: String
 
   """All values that are contained in given list."""
-  playerId_in: [String!]
+  player_in: [String!]
 
   """All values that are not contained in given list."""
-  playerId_not_in: [String!]
+  player_not_in: [String!]
 
   """All values less than the given value."""
-  playerId_lt: String
+  player_lt: String
 
   """All values less than or equal the given value."""
-  playerId_lte: String
+  player_lte: String
 
   """All values greater than the given value."""
-  playerId_gt: String
+  player_gt: String
 
   """All values greater than or equal the given value."""
-  playerId_gte: String
+  player_gte: String
 
   """All values containing the given string."""
-  playerId_contains: String
+  player_contains: String
 
   """All values not containing the given string."""
-  playerId_not_contains: String
+  player_not_contains: String
 
   """All values starting with the given string."""
-  playerId_starts_with: String
+  player_starts_with: String
 
   """All values not starting with the given string."""
-  playerId_not_starts_with: String
+  player_not_starts_with: String
 
   """All values ending with the given string."""
-  playerId_ends_with: String
+  player_ends_with: String
 
   """All values not ending with the given string."""
-  playerId_not_ends_with: String
-  teamId: String
+  player_not_ends_with: String
+  team: String
 
   """All values that are not equal to given value."""
-  teamId_not: String
+  team_not: String
 
   """All values that are contained in given list."""
-  teamId_in: [String!]
+  team_in: [String!]
 
   """All values that are not contained in given list."""
-  teamId_not_in: [String!]
+  team_not_in: [String!]
 
   """All values less than the given value."""
-  teamId_lt: String
+  team_lt: String
 
   """All values less than or equal the given value."""
-  teamId_lte: String
+  team_lte: String
 
   """All values greater than the given value."""
-  teamId_gt: String
+  team_gt: String
 
   """All values greater than or equal the given value."""
-  teamId_gte: String
+  team_gte: String
 
   """All values containing the given string."""
-  teamId_contains: String
+  team_contains: String
 
   """All values not containing the given string."""
-  teamId_not_contains: String
+  team_not_contains: String
 
   """All values starting with the given string."""
-  teamId_starts_with: String
+  team_starts_with: String
 
   """All values not starting with the given string."""
-  teamId_not_starts_with: String
+  team_not_starts_with: String
 
   """All values ending with the given string."""
-  teamId_ends_with: String
+  team_ends_with: String
 
   """All values not ending with the given string."""
-  teamId_not_ends_with: String
-  gameId: String
-
-  """All values that are not equal to given value."""
-  gameId_not: String
-
-  """All values that are contained in given list."""
-  gameId_in: [String!]
-
-  """All values that are not contained in given list."""
-  gameId_not_in: [String!]
-
-  """All values less than the given value."""
-  gameId_lt: String
-
-  """All values less than or equal the given value."""
-  gameId_lte: String
-
-  """All values greater than the given value."""
-  gameId_gt: String
-
-  """All values greater than or equal the given value."""
-  gameId_gte: String
-
-  """All values containing the given string."""
-  gameId_contains: String
-
-  """All values not containing the given string."""
-  gameId_not_contains: String
-
-  """All values starting with the given string."""
-  gameId_starts_with: String
-
-  """All values not starting with the given string."""
-  gameId_not_starts_with: String
-
-  """All values ending with the given string."""
-  gameId_ends_with: String
-
-  """All values not ending with the given string."""
-  gameId_not_ends_with: String
+  team_not_ends_with: String
   action: String
 
   """All values that are not equal to given value."""
@@ -1812,56 +1817,44 @@ input StatSubscriptionWhereInput {
   node: StatWhereInput
 }
 
-input StatUpdateDataInput {
-  playerId: String
-  teamId: String
-  gameId: String
-  action: String
-  result: String
-  playerName: String
-  updateAt: DateTime
-}
-
 input StatUpdateInput {
-  playerId: String
-  teamId: String
-  gameId: String
+  player: String
+  team: String
   action: String
   result: String
   playerName: String
   updateAt: DateTime
+  game: GameUpdateOneRequiredWithoutStatsInput
 }
 
 input StatUpdateManyDataInput {
-  playerId: String
-  teamId: String
-  gameId: String
+  player: String
+  team: String
   action: String
   result: String
   playerName: String
   updateAt: DateTime
 }
 
-input StatUpdateManyInput {
-  create: [StatCreateInput!]
+input StatUpdateManyMutationInput {
+  player: String
+  team: String
+  action: String
+  result: String
+  playerName: String
+  updateAt: DateTime
+}
+
+input StatUpdateManyWithoutGameInput {
+  create: [StatCreateWithoutGameInput!]
   connect: [StatWhereUniqueInput!]
   set: [StatWhereUniqueInput!]
   disconnect: [StatWhereUniqueInput!]
   delete: [StatWhereUniqueInput!]
-  update: [StatUpdateWithWhereUniqueNestedInput!]
+  update: [StatUpdateWithWhereUniqueWithoutGameInput!]
   updateMany: [StatUpdateManyWithWhereNestedInput!]
   deleteMany: [StatScalarWhereInput!]
-  upsert: [StatUpsertWithWhereUniqueNestedInput!]
-}
-
-input StatUpdateManyMutationInput {
-  playerId: String
-  teamId: String
-  gameId: String
-  action: String
-  result: String
-  playerName: String
-  updateAt: DateTime
+  upsert: [StatUpsertWithWhereUniqueWithoutGameInput!]
 }
 
 input StatUpdateManyWithWhereNestedInput {
@@ -1869,15 +1862,24 @@ input StatUpdateManyWithWhereNestedInput {
   data: StatUpdateManyDataInput!
 }
 
-input StatUpdateWithWhereUniqueNestedInput {
-  where: StatWhereUniqueInput!
-  data: StatUpdateDataInput!
+input StatUpdateWithoutGameDataInput {
+  player: String
+  team: String
+  action: String
+  result: String
+  playerName: String
+  updateAt: DateTime
 }
 
-input StatUpsertWithWhereUniqueNestedInput {
+input StatUpdateWithWhereUniqueWithoutGameInput {
   where: StatWhereUniqueInput!
-  update: StatUpdateDataInput!
-  create: StatCreateInput!
+  data: StatUpdateWithoutGameDataInput!
+}
+
+input StatUpsertWithWhereUniqueWithoutGameInput {
+  where: StatWhereUniqueInput!
+  update: StatUpdateWithoutGameDataInput!
+  create: StatCreateWithoutGameInput!
 }
 
 input StatWhereInput {
@@ -1929,126 +1931,86 @@ input StatWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  playerId: String
+  player: String
 
   """All values that are not equal to given value."""
-  playerId_not: String
+  player_not: String
 
   """All values that are contained in given list."""
-  playerId_in: [String!]
+  player_in: [String!]
 
   """All values that are not contained in given list."""
-  playerId_not_in: [String!]
+  player_not_in: [String!]
 
   """All values less than the given value."""
-  playerId_lt: String
+  player_lt: String
 
   """All values less than or equal the given value."""
-  playerId_lte: String
+  player_lte: String
 
   """All values greater than the given value."""
-  playerId_gt: String
+  player_gt: String
 
   """All values greater than or equal the given value."""
-  playerId_gte: String
+  player_gte: String
 
   """All values containing the given string."""
-  playerId_contains: String
+  player_contains: String
 
   """All values not containing the given string."""
-  playerId_not_contains: String
+  player_not_contains: String
 
   """All values starting with the given string."""
-  playerId_starts_with: String
+  player_starts_with: String
 
   """All values not starting with the given string."""
-  playerId_not_starts_with: String
+  player_not_starts_with: String
 
   """All values ending with the given string."""
-  playerId_ends_with: String
+  player_ends_with: String
 
   """All values not ending with the given string."""
-  playerId_not_ends_with: String
-  teamId: String
+  player_not_ends_with: String
+  team: String
 
   """All values that are not equal to given value."""
-  teamId_not: String
+  team_not: String
 
   """All values that are contained in given list."""
-  teamId_in: [String!]
+  team_in: [String!]
 
   """All values that are not contained in given list."""
-  teamId_not_in: [String!]
+  team_not_in: [String!]
 
   """All values less than the given value."""
-  teamId_lt: String
+  team_lt: String
 
   """All values less than or equal the given value."""
-  teamId_lte: String
+  team_lte: String
 
   """All values greater than the given value."""
-  teamId_gt: String
+  team_gt: String
 
   """All values greater than or equal the given value."""
-  teamId_gte: String
+  team_gte: String
 
   """All values containing the given string."""
-  teamId_contains: String
+  team_contains: String
 
   """All values not containing the given string."""
-  teamId_not_contains: String
+  team_not_contains: String
 
   """All values starting with the given string."""
-  teamId_starts_with: String
+  team_starts_with: String
 
   """All values not starting with the given string."""
-  teamId_not_starts_with: String
+  team_not_starts_with: String
 
   """All values ending with the given string."""
-  teamId_ends_with: String
+  team_ends_with: String
 
   """All values not ending with the given string."""
-  teamId_not_ends_with: String
-  gameId: String
-
-  """All values that are not equal to given value."""
-  gameId_not: String
-
-  """All values that are contained in given list."""
-  gameId_in: [String!]
-
-  """All values that are not contained in given list."""
-  gameId_not_in: [String!]
-
-  """All values less than the given value."""
-  gameId_lt: String
-
-  """All values less than or equal the given value."""
-  gameId_lte: String
-
-  """All values greater than the given value."""
-  gameId_gt: String
-
-  """All values greater than or equal the given value."""
-  gameId_gte: String
-
-  """All values containing the given string."""
-  gameId_contains: String
-
-  """All values not containing the given string."""
-  gameId_not_contains: String
-
-  """All values starting with the given string."""
-  gameId_starts_with: String
-
-  """All values not starting with the given string."""
-  gameId_not_starts_with: String
-
-  """All values ending with the given string."""
-  gameId_ends_with: String
-
-  """All values not ending with the given string."""
-  gameId_not_ends_with: String
+  team_not_ends_with: String
   action: String
 
   """All values that are not equal to given value."""
@@ -2213,6 +2175,7 @@ input StatWhereInput {
 
   """All values greater than or equal the given value."""
   updateAt_gte: DateTime
+  game: GameWhereInput
 }
 
 input StatWhereUniqueInput {

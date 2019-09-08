@@ -30,6 +30,12 @@ type Mutation {
   # custom type
   signout: SuccessMessage
   createGame(homeTeamId: ID!, opposingTeam: String, homeTeam: String): Game!
+  updateGame(
+    id: ID!
+    homeScore: String
+    opponentScore: String
+    stats: [StatCreateWithoutGameInput]!
+  ): Game
 }
 
 type Query {
@@ -43,4 +49,6 @@ type Query {
   users: [User]!
   team(where: TeamWhereUniqueInput!): Team
   games: [Game]!
+  game(where: GameWhereUniqueInput!): Game
+  stats: [Stat]!
 }

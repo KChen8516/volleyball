@@ -45,6 +45,11 @@ const Query = {
     const games = await context.database.query.games();
     return games;
   },
+  game: forwardTo("database"),
+  async stats(parent, args, context, info) {
+    const stats = await context.database.query.stats();
+    return stats;
+  },
 };
 
 module.exports = Query;

@@ -41,7 +41,6 @@ export const GameForm = () => {
   };
 
   const onSubmitGame = async (mutation) => {
-    console.log({ homeTeamId, opponentName });
     const res = await mutation();
     console.log(res.data);
     Router.push({
