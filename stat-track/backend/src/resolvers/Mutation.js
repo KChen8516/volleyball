@@ -145,6 +145,7 @@ const Mutations = {
     if (context.request.userId) {
       payload.data.user = { connect: { id: context.request.userId } };
     }
+
     const game = await context.database.mutation.createGame(payload, info);
 
     // optionally include a user if one is logged in
@@ -161,7 +162,6 @@ const Mutations = {
     delete updates.id;
 
     // TODO: fix the relationship between stats and games so that both can be fetched indepdently
-    console.log({ updates }, updates.stats);
 
     // run the generated update method
     return context.database.mutation.updateGame(

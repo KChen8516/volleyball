@@ -29,7 +29,7 @@ type Mutation {
   signin(email: String!, password: String!): User!
   # custom type
   signout: SuccessMessage
-  createGame(homeTeamId: ID!, opposingTeam: String, homeTeam: String): Game!
+  createGame(homeTeamId: ID!, opposingTeam: String): Game!
   updateGame(
     id: ID!
     homeScore: String

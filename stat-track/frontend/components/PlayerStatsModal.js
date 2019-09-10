@@ -1,28 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
-export const PlayerStatsModal = ({ isActive, toggleModal, stats, activePlayer = {} }) => {
+export const PlayerStatsModal = ({ isActive, toggleModal, stats, activePlayer }) => {
+  const [ playerStats, setplayerStats ] = useState([]);
+
+  useEffect(
+    () => {
+      const filteredStats = filterPlayerStats(stats);
+      setplayerStats(filteredStats);
+    },
+    [ stats, activePlayer ],
+  );
+
   const toggle = () => {
     isActive ? toggleModal(false) : toggleModal(true);
   };
 
   const filterPlayerStats = (stats) => {
-    if (!stats) return null;
-    console.log({ stats });
-    console.log({ activePlayer });
-    console.log(stats.filter((stat) => stat.playerId === activePlayer.id));
-    return stats.filter((stat) => stat.playerId === activePlayer.id).reverse();
+    if (!stats || !activePlayer) return [];
+    return stats.filter((stat) => stat.player === activePlayer.id).reverse();
   };
 
-  const renderPlayerStats = (stats) => {
-    if (!stats) return null;
-
-    const filteredStats = filterPlayerStats(stats);
-
-    console.log({ filteredStats });
-
-    return filteredStats.map((stat) => (
+  const renderPlayerStats = () => {
+    return playerStats.map((stat) => (
       <tr>
         <th>{stat.action}</th>
         <td>{stat.result}</td>
@@ -30,7 +31,42 @@ export const PlayerStatsModal = ({ isActive, toggleModal, stats, activePlayer = 
     ));
   };
 
-  console.log({ activePlayer });
+  const calcPercentage = (action) => {
+    // get the total of the passed in action
+    const totalActionStats = playerStats.filter((data) => data.action === action);
+
+    if (totalActionStats.length === 0) return 0;
+
+    // calculate the sum of each action result
+    const sumOfActionValues = totalActionStats.reduce((prev, curr) => {
+      return prev + Number(curr.result);
+    }, 0);
+
+    const calculatedPercentage = (sumOfActionValues / totalActionStats.length).toFixed(2);
+
+    return calculatedPercentage;
+  };
+
+  const calcHittingPercentage = () => {
+    // get the total # of attempts, kills, and errors
+    let attempts = 0;
+    let kills = 0;
+    let errors = 0;
+
+    playerStats.forEach((data) => {
+      if (data.action === "hitting") {
+        if (data.result === "attempt") attempts++;
+        if (data.result === "kill") kills++;
+        if (data.result === "error") errors++;
+      }
+    });
+
+    if (attempts === 0) return 0;
+
+    //TODO: should show an error if # of kills/attempts > # of attempts
+
+    return ((kills - errors) / attempts).toFixed(2);
+  };
 
   // SSR doesn't provide client objects so check for browser env
   return process.browser
@@ -39,13 +75,37 @@ export const PlayerStatsModal = ({ isActive, toggleModal, stats, activePlayer = 
           <div className="modal-background" />
           <div className="modal-card">
             <header className="modal-card-head">
-              <p className="modal-card-title">
-                {activePlayer.firstName} {activePlayer.lastName} Stats
-              </p>
+              {activePlayer && (
+                <p className="modal-card-title">
+                  {activePlayer.firstName} {activePlayer.lastName} Stats
+                </p>
+              )}
               <button className="delete" aria-label="close" onClick={toggle} />
             </header>
             <section className="modal-card-body">
               <div className="content">
+                {/* Aggregate stats here */}
+                <nav class="level">
+                  <div className="level-item has-text-centered">
+                    <div>
+                      <p className="heading">Passing</p>
+                      <p className="title">{calcPercentage("passing")}</p>
+                    </div>
+                  </div>
+                  <div className="level-item has-text-centered">
+                    <div>
+                      <p className="heading">Serving</p>
+                      <p className="title">{calcPercentage("serving")}</p>
+                    </div>
+                  </div>
+                  <div className="level-item has-text-centered">
+                    <div>
+                      <p className="heading">Hitting</p>
+                      <p className="title">{calcHittingPercentage()}</p>
+                    </div>
+                  </div>
+                </nav>
+                {/* Raw table stats */}
                 <table className="table is-striped is-fullwidth">
                   <thead>
                     <tr>
@@ -53,7 +113,7 @@ export const PlayerStatsModal = ({ isActive, toggleModal, stats, activePlayer = 
                       <th>Result</th>
                     </tr>
                   </thead>
-                  <tbody>{renderPlayerStats(stats)}</tbody>
+                  <tbody>{renderPlayerStats()}</tbody>
                 </table>
               </div>
             </section>

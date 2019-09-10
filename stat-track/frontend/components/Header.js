@@ -3,12 +3,10 @@ import Router from "next/router";
 import NProgress from "nprogress";
 
 Router.onRouteChangeStart = () => {
-  // console.log("start triggered");
   NProgress.start();
 };
 
 Router.onRouteChangeComplete = () => {
-  // console.log("complete triggered");
   NProgress.done();
 };
 

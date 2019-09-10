@@ -8,11 +8,11 @@ import Error from "./ErrorMessage";
 import { ALL_TEAMS_QUERY } from "./AddPlayer";
 
 const CREATE_GAME_MUTATION = gql`
-  mutation CREATE_GAME_MUTATION($homeTeamId: ID!, $opponent: String) {
-    createGame(homeTeamId: $homeTeamId, opposingTeam: $opponent) {
+  mutation CREATE_GAME_MUTATION($homeTeamId: ID!, $opposingTeam: String) {
+    createGame(homeTeamId: $homeTeamId, opposingTeam: $opposingTeam) {
       id
       homeTeamId
-      homeTeam
+      opposingTeam
     }
   }
 `;
@@ -42,7 +42,6 @@ export const GameForm = () => {
 
   const onSubmitGame = async (mutation) => {
     const res = await mutation();
-    console.log(res.data);
     Router.push({
       pathname: "/game",
       query: { id: res.data.createGame.id, homeTeamId: res.data.createGame.homeTeamId },
@@ -65,7 +64,7 @@ export const GameForm = () => {
         return (
           <Mutation
             mutation={CREATE_GAME_MUTATION}
-            variables={{ homeTeamId, opponentName }}
+            variables={{ homeTeamId, opposingTeam: opponentName }}
           >
             {(createGame, { error, loading }) => (
               <Fragment>

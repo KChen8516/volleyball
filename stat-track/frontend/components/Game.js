@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
@@ -7,6 +7,7 @@ import Router from "next/router";
 import { PlayerCard } from "./PlayerCard";
 import { PlayerStatsModal } from "./PlayerStatsModal";
 import Error from "./ErrorMessage";
+import { useLocalStorage } from "../lib/useLocalStorage";
 
 const Container = styled.div`padding: 32px 32px 0 32px;`;
 
@@ -72,6 +73,30 @@ export const GameScreen = ({ gameId, homeTeamId }) => {
   const [ stats, setStats ] = useState([]);
   const [ isActive, setIsActive ] = useState(false);
   const [ activePlayer, setActivePlayer ] = useState();
+  const [ activeGame, setActiveGame ] = useLocalStorage(gameId);
+
+  useEffect(
+    () => {
+      // check if there's a game in localStorage for the gameId
+      const unsavedGame = window.localStorage.getItem(gameId);
+      if (unsavedGame) {
+        // make sure it's the same gameId
+        const storedStats = JSON.parse(unsavedGame);
+        setStats(storedStats);
+      } else {
+        // initialize the stored state in localStorage
+        setActiveGame([]);
+      }
+    },
+    [ gameId ],
+  );
+
+  useEffect(
+    () => {
+      setActiveGame(stats);
+    },
+    [ stats ],
+  );
 
   const recordStat = ({ playerId, firstName, lastName, action, result }) => {
     setStats((stats) =>
@@ -124,12 +149,18 @@ export const GameScreen = ({ gameId, homeTeamId }) => {
 
   const submitGame = async (updateGameMutation) => {
     const res = await updateGameMutation();
-    console.log(res.data);
     // go to the games collection screen for the team
     Router.push({
       pathname: "/games",
       query: { id: res.data.updateGame.id },
     });
+  };
+
+  const clearLocalStorage = () => {
+    // make sure to clear the localStorage of existing games
+    if (window) {
+      window.localStorage.removeItem(gameId);
+    }
   };
 
   return (
@@ -154,6 +185,7 @@ export const GameScreen = ({ gameId, homeTeamId }) => {
               stats,
               homeTeam: name,
             }}
+            onCompleted={clearLocalStorage}
           >
             {(updateGame, { error, loading }) => {
               if (error) {
@@ -170,8 +202,14 @@ export const GameScreen = ({ gameId, homeTeamId }) => {
                     <p className="control" onClick={() => submitGame(updateGame)}>
                       <a className="button is-link">Save Game</a>
                     </p>
-                    <p className="control">
-                      <a className="button is-danger">New Game</a>
+                    <p
+                      className="control"
+                      onClick={() => {
+                        clearLocalStorage();
+                        Router.push({ pathname: "/create" });
+                      }}
+                    >
+                      <a className="button is-danger">Delete Game</a>
                     </p>
                   </div>
                   <PlayerStatsModal
