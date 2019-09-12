@@ -42,4 +42,5 @@ Make sure to update ```datamodel.graphql``` first. Once the model is available o
 ### Backend
 *Database:* The Postgres DB and server are both hosted by Heroku and managed through Prisma. 
 
-*Yoga GraphQL Server:* Download the Heroku CLI or install it through `brew`;
+*Yoga GraphQL Server:* Download the Heroku CLI or install it through `brew`. Once installed login through the CLI with `heroku login`. We've separated deployments between a heroku backend and heroku front end workflow. We push subfolders up to the new heroku remotes by using `git subtree push --prefix {folder-name} {remote-name} {remote-branch-name}`.
+[Production GraphQL Playground](https://stat-track-yoga-prod.herokuapp.com)
