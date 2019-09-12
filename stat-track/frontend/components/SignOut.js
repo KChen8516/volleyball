@@ -11,7 +11,7 @@ const CenteredContainer = styled.div`
 export const SignOut = () => {
   return (
     <CenteredContainer>
-      <h2 className="title is-2">Signed out</h2>
+      <h2 className="title is-2">You have successfully signed out.</h2>
     </CenteredContainer>
   );
 };

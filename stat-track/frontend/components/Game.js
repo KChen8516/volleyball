@@ -209,7 +209,12 @@ export const GameScreen = ({ gameId, homeTeamId }) => {
                         Router.push({ pathname: "/create" });
                       }}
                     >
-                      <a className="button is-danger">Delete Game</a>
+                      <a className="button is-danger is-outlined">
+                        <span>Delete</span>
+                        <span className="icon is-small">
+                          <i className="fas fa-times" />
+                        </span>
+                      </a>
                     </p>
                   </div>
                   <PlayerStatsModal

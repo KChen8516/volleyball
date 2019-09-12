@@ -25,7 +25,7 @@ const Query = {
     return context.database.query.user({ where: { id: context.request.userId } }, info);
   },
   async teams(parent, args, context, info) {
-    const teams = await context.database.query.teams();
+    const teams = await context.database.query.teams({}, info);
     return teams;
   },
   async users(parent, args, context, info) {
@@ -42,12 +42,12 @@ const Query = {
   },
   team: forwardTo("database"),
   async games(parent, args, context, info) {
-    const games = await context.database.query.games();
+    const games = await context.database.query.games({}, info);
     return games;
   },
   game: forwardTo("database"),
   async stats(parent, args, context, info) {
-    const stats = await context.database.query.stats();
+    const stats = await context.database.query.stats({}, info);
     return stats;
   },
 };

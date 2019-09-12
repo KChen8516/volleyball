@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import Link from "next/link";
+import Router from "next/router";
 
 import { User, CURRENT_USER_QUERY } from "./User";
 
@@ -17,6 +18,7 @@ export const Nav = () => (
   <User>
     {({ data }) => {
       const { me } = data;
+
       return (
         <nav className="navbar is-light" role="navigation" aria-label="main navigation">
           <div className="navbar-brand">
@@ -54,40 +56,47 @@ export const Nav = () => (
             </div>
 
             <div className="navbar-end">
-              {data && (
+              {me && (
                 <div className="navbar-item">
                   <p>Welcome, {me.name}</p>
                 </div>
               )}
               <div className="navbar-item">
                 <div className="buttons">
-                  {data && (
-                    <Mutation
-                      mutation={SIGNOUT_MUTATION}
-                      refetchQueries={[ { query: CURRENT_USER_QUERY } ]}
-                    >
-                      {(signOut) => (
-                        <a className="button is-light" onClick={signOut}>
-                          Sign Out
-                        </a>
-                      )}
-                    </Mutation>
-                  )}
-                  {!data && (
+                  {me && (
                     <Fragment>
-                      <Link href="/signup">
-                        <a className="button is-light">Sign Up</a>
-                      </Link>
-                      <Link href="/signin">
-                        <a className="button is-light">Sign In</a>
+                      <Mutation
+                        mutation={SIGNOUT_MUTATION}
+                        refetchQueries={[ { query: CURRENT_USER_QUERY } ]}
+                        onCompleted={() => {
+                          Router.push({
+                            pathname: "/signout",
+                          });
+                        }}
+                      >
+                        {(signOut) => (
+                          <a className="button is-danger is-outlined" onClick={signOut}>
+                            Sign Out
+                          </a>
+                        )}
+                      </Mutation>
+                      <Link href="/create">
+                        <a className="button is-primary">
+                          <strong>Create</strong>
+                        </a>
                       </Link>
                     </Fragment>
                   )}
-                  <Link href="/create">
-                    <a className="button is-primary">
-                      <strong>Create</strong>
-                    </a>
-                  </Link>
+                  {!me && (
+                    <Fragment>
+                      <Link href="/signup">
+                        <a className="button is-info is-outlined">Sign Up</a>
+                      </Link>
+                      <Link href="/signin">
+                        <a className="button is-primary">Sign In</a>
+                      </Link>
+                    </Fragment>
+                  )}
                 </div>
               </div>
             </div>

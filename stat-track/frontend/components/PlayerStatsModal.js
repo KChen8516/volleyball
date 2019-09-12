@@ -2,6 +2,11 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
+const ERROR_STATS_STYLES = {
+  backgroundColor: "#f1c1c0",
+  color: "#e15554",
+};
+
 export const PlayerStatsModal = ({ isActive, toggleModal, stats, activePlayer }) => {
   const [ playerStats, setplayerStats ] = useState([]);
 
@@ -23,12 +28,15 @@ export const PlayerStatsModal = ({ isActive, toggleModal, stats, activePlayer })
   };
 
   const renderPlayerStats = () => {
-    return playerStats.map((stat) => (
-      <tr>
-        <th>{stat.action}</th>
-        <td>{stat.result}</td>
-      </tr>
-    ));
+    return playerStats.map((stat) => {
+      const isError = stat.result === "error";
+      return (
+        <tr style={isError ? ERROR_STATS_STYLES : null}>
+          <th style={isError ? { color: "#e15554" } : null}>{stat.action}</th>
+          <td>{stat.result}</td>
+        </tr>
+      );
+    });
   };
 
   const calcPercentage = (action) => {
@@ -39,6 +47,7 @@ export const PlayerStatsModal = ({ isActive, toggleModal, stats, activePlayer })
 
     // calculate the sum of each action result
     const sumOfActionValues = totalActionStats.reduce((prev, curr) => {
+      if (curr.result === "error") return prev;
       return prev + Number(curr.result);
     }, 0);
 
@@ -65,7 +74,7 @@ export const PlayerStatsModal = ({ isActive, toggleModal, stats, activePlayer })
 
     //TODO: should show an error if # of kills/attempts > # of attempts
 
-    return ((kills - errors) / attempts).toFixed(2);
+    return ((kills - errors) / attempts).toFixed(3);
   };
 
   // SSR doesn't provide client objects so check for browser env
@@ -85,22 +94,22 @@ export const PlayerStatsModal = ({ isActive, toggleModal, stats, activePlayer })
             <section className="modal-card-body">
               <div className="content">
                 {/* Aggregate stats here */}
-                <nav class="level">
+                <nav className="level">
                   <div className="level-item has-text-centered">
                     <div>
-                      <p className="heading">Passing</p>
+                      <p className="heading">Passing avg.</p>
                       <p className="title">{calcPercentage("passing")}</p>
                     </div>
                   </div>
                   <div className="level-item has-text-centered">
                     <div>
-                      <p className="heading">Serving</p>
+                      <p className="heading">Serving avg.</p>
                       <p className="title">{calcPercentage("serving")}</p>
                     </div>
                   </div>
                   <div className="level-item has-text-centered">
                     <div>
-                      <p className="heading">Hitting</p>
+                      <p className="heading">Hitting %</p>
                       <p className="title">{calcHittingPercentage()}</p>
                     </div>
                   </div>

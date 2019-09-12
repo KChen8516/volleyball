@@ -6,17 +6,12 @@
 - [X] Styled Components
 - [ ] useForm custom hook
 
-## Deployment
-- [ ] Now
-- [ ] Digital Ocean
-- [ ] Heroku
-
 ## Features
 - [X] User should be able to create/edit/delete a player
 - [X] User should be able to create/edit/delete a team of players
 - [X] User should be able to record serves, blocks, passes, and kills/attempts for each player
-- [ ] User should be able to view individual highlights of a player during a game
-- [ ] User should be able to see a history of actions during a game
+- [X] User should be able to view individual highlights of a player during a game
+- [X] User should be able to see a history of actions for a player during a game
 - [ ] User should be able to keep track of the score of a match/game
 
 ## Running Frontend
@@ -39,3 +34,12 @@ Make sure to update ```datamodel.graphql``` first. Once the model is available o
 
 ```schema.graphql``` represents the public facing API for clients to consume.
 
+## Deployment
+- [X] Now
+- [X] Heroku
+- [ ] Digital Ocean
+
+### Backend
+*Database:* The Postgres DB and server are both hosted by Heroku and managed through Prisma. 
+
+*Yoga GraphQL Server:* Download the Heroku CLI or install it through `brew`;

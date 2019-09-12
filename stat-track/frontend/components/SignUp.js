@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
+import Router from "next/router";
 
 import { CURRENT_USER_QUERY } from "./User";
 import Error from "./ErrorMessage";
@@ -41,9 +42,11 @@ export const SignUpForm = () => {
   };
 
   const signUpUser = async (mutation) => {
-    const rest = await mutation();
-    // TODO: redirect the user somewhere
+    const response = await mutation();
     clearState();
+    Router.push({
+      pathname: "/",
+    });
   };
 
   const clearState = () => {

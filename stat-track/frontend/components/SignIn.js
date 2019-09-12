@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
+import Router from "next/router";
 
 import { CURRENT_USER_QUERY } from "./User";
 import Error from "./ErrorMessage";
@@ -39,8 +40,10 @@ export const SignInForm = () => {
   };
 
   const signInUser = async (mutation) => {
-    const rest = await mutation();
-    // TODO: redirect the user somewhere
+    const response = await mutation();
+    Router.push({
+      pathname: "/",
+    });
     clearState();
   };
 
@@ -95,6 +98,11 @@ export const SignInForm = () => {
                         name="password"
                         value={password}
                         onChange={handleUpdateForm}
+                        onKeyDown={(event) => {
+                          if (event.key == "Enter") {
+                            signInUser(signIn);
+                          }
+                        }}
                       />
                       <span className="icon is-left">
                         <i className="fas fa-lock" />
