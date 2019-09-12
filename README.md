@@ -35,8 +35,8 @@ Make sure to update ```datamodel.graphql``` first. Once the model is available o
 ```schema.graphql``` represents the public facing API for clients to consume.
 
 ## Deployment
-- [X] Now
 - [X] Heroku
+- [X] Now
 - [ ] Digital Ocean
 
 ### Backend
@@ -44,3 +44,6 @@ Make sure to update ```datamodel.graphql``` first. Once the model is available o
 
 *Yoga GraphQL Server:* Download the Heroku CLI or install it through `brew`. Once installed login through the CLI with `heroku login`. We've separated deployments between a heroku backend and heroku front end workflow. We push subfolders up to the new heroku remotes by using `git subtree push --prefix {folder-name} {remote-name} {remote-branch-name}`.
 [Production GraphQL Playground](https://stat-track-yoga-prod.herokuapp.com)
+
+### Frontend
+*NextJS:* Next relies on a `.next` folder for the compiled app for reference when attempting to run `npm start`. We don't want the `.next` folder in our repo so we need a git hook (`heroku-postbuild`) for heroku to be able to build the app while relying on git.
