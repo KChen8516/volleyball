@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Mutation, Query } from "react-apollo";
 import gql from "graphql-tag";
+import Router from "next/router";
 
 import Error from "./ErrorMessage";
 
@@ -72,6 +73,11 @@ export const EditPlayerForm = ({ id }) => {
         ...playerUpdates,
       },
     });
+
+    Router.push({
+      pathname: "/player",
+      query: { id: res.data.updatePlayer.id },
+    });
   };
 
   return (
@@ -80,14 +86,18 @@ export const EditPlayerForm = ({ id }) => {
         if (loading) {
           return <p>Loading...</p>;
         }
+
         const { player: { firstName, lastName, position, number } } = data;
+
         return (
           <Mutation mutation={UPDATE_PLAYER_MUTATION}>
             {(updatePlayer, { error, loading }) => (
               <TopPadding className="container is-fluid">
                 <Error error={error} />
                 <fieldset disabled={loading} aria-busy={loading}>
-                  <h2 className="title is-2">Edit Player {id}</h2>
+                  <h2 className="title is-2">
+                    Edit Player: {firstName} {lastName}
+                  </h2>
                   <div className="field">
                     <label className="label">First Name</label>
                     <div className="control">
@@ -155,7 +165,16 @@ export const EditPlayerForm = ({ id }) => {
                         </a>
                       </p>
                       <p className="control">
-                        <a className="button is-light">Cancel</a>
+                        <a
+                          className="button is-danger"
+                          onClick={() => {
+                            Router.push({
+                              pathname: "/players",
+                            });
+                          }}
+                        >
+                          Cancel
+                        </a>
                       </p>
                     </div>
                   </TopPadding>

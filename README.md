@@ -36,7 +36,7 @@ Make sure to update ```datamodel.graphql``` first. Once the model is available o
 
 ## Deployment
 - [X] Heroku
-- [X] Now
+- [ ] Now
 - [ ] Digital Ocean
 
 ### Backend
@@ -46,4 +46,4 @@ Make sure to update ```datamodel.graphql``` first. Once the model is available o
 [Production GraphQL Playground](https://stat-track-yoga-prod.herokuapp.com)
 
 ### Frontend
-*NextJS:* Next relies on a `.next` folder for the compiled app for reference when attempting to run `npm start`. We don't want the `.next` folder in our repo so we need a git hook (`heroku-postbuild`) for heroku to be able to build the app while relying on git.
+*NextJS:* Next relies on a `.next` folder for the compiled app for reference when attempting to run `npm start`. We don't want the `.next` folder in our repo so we need a git hook (`heroku-postbuild`) for heroku to be able to build the app while relying on git. We can use the same `git subtree` command to trigger a deployment to heroku.
