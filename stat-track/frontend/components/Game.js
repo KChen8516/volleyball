@@ -163,6 +163,26 @@ export const GameScreen = ({ gameId, homeTeamId }) => {
     }
   };
 
+  const getAggregateStat = (action, result) =>
+    stats.filter((stat) => stat.action === action && stat.result === result).length;
+
+  const calcActionAvg = (action) => {
+    // get the total of the passed in action
+    const totalActionStats = stats.filter((data) => data.action === action);
+
+    if (totalActionStats.length === 0) return 0;
+
+    // calculate the sum of each action result
+    const sumOfActionValues = totalActionStats.reduce((prev, curr) => {
+      if (curr.result === "error") return prev;
+      return prev + Number(curr.result);
+    }, 0);
+
+    const calculatedAverage = (sumOfActionValues / totalActionStats.length).toFixed(2);
+
+    return calculatedAverage;
+  };
+
   return (
     <Query query={SINGLE_TEAM_QUERY} variables={{ id: homeTeamId }}>
       {({ data, loading, error }) => {
@@ -194,7 +214,28 @@ export const GameScreen = ({ gameId, homeTeamId }) => {
 
               return (
                 <Container>
-                  {/* <h2 className="title is-2">Current Roster</h2> */}
+                  {/* Highlight stats */}
+                  <nav className="level">
+                    <div className="level-item has-text-centered">
+                      <div>
+                        <p className="heading">Service Errors</p>
+                        <p className="title">{getAggregateStat("serving", "error")}</p>
+                      </div>
+                    </div>
+                    <div className="level-item has-text-centered">
+                      <div>
+                        <p className="heading">Passing Avg.</p>
+                        <p className="title">{calcActionAvg("passing")}</p>
+                      </div>
+                    </div>
+                    <div className="level-item has-text-centered">
+                      <div>
+                        <p className="heading">Hitting Errors</p>
+                        <p className="title">{getAggregateStat("hitting", "error")}</p>
+                      </div>
+                    </div>
+                  </nav>
+                  {/* Stat collection screen */}
                   <div className="columns is-multiline is-mobile">
                     {renderPlayerCards(players)}
                   </div>

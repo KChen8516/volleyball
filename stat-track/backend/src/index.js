@@ -15,7 +15,16 @@ const server = createServer();
 server.express.use(cookieParser());
 
 server.express.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", process.env.FRONTEND_URL);
+  // store an array of allowed origins
+  const allowedOrigins = [
+    process.env.FRONTEND_URL,
+    "http://stat-track-nextjs-prod.herokuapp.com",
+  ];
+  const requestOrigin = req.headers.origin;
+
+  if (allowedOrigins.indexOf(requestOrigin) > -1) {
+    res.header("Access-Control-Allow-Origin", requestOrigin);
+  }
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept",
@@ -51,7 +60,7 @@ server.start(
   {
     cors: {
       credentials: true,
-      origin: [ process.env.FRONTEND_URL ],
+      origin: [ process.env.FRONTEND_URL, "http://stat-track-nextjs-prod.herokuapp.com" ],
     },
   },
   (deets) => {
