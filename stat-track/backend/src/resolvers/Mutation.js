@@ -133,7 +133,8 @@ const Mutations = {
     });
 
     if (context.request.headers["user-agent"].indexOf("iPad") > -1) {
-      console.log("We can try something here to set a mobile cookie?");
+      console.log("MOBILE DEVICE DETECTED");
+      console.log("CONTEXT RESPONSE OBJECT >>>", context.response);
     }
     // 5. return the user
     return user;
