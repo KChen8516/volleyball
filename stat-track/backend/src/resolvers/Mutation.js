@@ -134,6 +134,7 @@ const Mutations = {
     return user;
   },
   async signout(parent, args, context, info) {
+    console.log("SIGNING OUT");
     // user clearCookie from cookieParser
     context.response.clearCookie("token");
     return { message: "You've been successfully sign out!" };
