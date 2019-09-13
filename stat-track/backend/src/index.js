@@ -34,6 +34,8 @@ server.express.use(function(req, res, next) {
 
 // decode the jwt in localstorage so we can get the user id on each request.
 server.express.use((req, res, next) => {
+  console.log("JWT MIDDLEWARE");
+  console.log({ req });
   // grab the cookie available by cookieParser
   const { token } = req.cookies;
   // decode the token
