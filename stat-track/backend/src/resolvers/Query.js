@@ -20,9 +20,11 @@ const Query = {
     // console.log({ context });
     // check if there's a current userId
     if (!context.request.userId) {
-      console.log(context.request);
+      console.log("No userId found", context.request);
       return null;
     }
+
+    console.log("USER ID FOUND", context.request.userId);
 
     return context.database.query.user({ where: { id: context.request.userId } }, info);
   },

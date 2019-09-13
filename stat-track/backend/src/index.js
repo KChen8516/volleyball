@@ -39,7 +39,7 @@ server.express.use((req, res, next) => {
   // grab the cookie available by cookieParser
   const { token } = req.cookies;
 
-  console.log("SAFARI COOKIES", req.cookies);
+  console.log("MOBILE REQ OBJ >>>", req);
   // decode the token
   if (token) {
     const { userId } = jwt.verify(token, process.env.APP_SECRET);
