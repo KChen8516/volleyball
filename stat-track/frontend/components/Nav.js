@@ -24,6 +24,9 @@ export const Nav = () => {
   return (
     <User>
       {({ data }) => {
+        if (!data) {
+          return <div>There was a catastrophic error.</div>;
+        }
         const { me } = data;
 
         return (
