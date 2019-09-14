@@ -138,6 +138,7 @@ const Mutations = {
       console.log(
         "CONTEXT RESPONSE COOKIES FUNCTION >>>",
         context.response.cookie("token", token, {
+          domain: "127.0.0.1",
           httpOnly: true, // prevent JS access to the token
           maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year
         }),
