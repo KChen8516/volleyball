@@ -135,14 +135,14 @@ const Mutations = {
     if (context.request.headers["user-agent"].indexOf("iPad") > -1) {
       console.log("MOBILE DEVICE DETECTED");
       console.log("CONTEXT RESPONSE OBJECT >>>", context.response);
-      console.log(
-        "CONTEXT RESPONSE COOKIES FUNCTION >>>",
-        context.response.cookie("token", token, {
-          domain: "127.0.0.1",
-          httpOnly: true, // prevent JS access to the token
-          maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year
-        }),
-      );
+      // console.log(
+      //   "CONTEXT RESPONSE COOKIES FUNCTION >>>",
+      //   context.response.cookie("token", token, {
+      //     domain: "127.0.0.1",
+      //     httpOnly: true, // prevent JS access to the token
+      //     maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year
+      //   }),
+      // );
     }
     // 5. return the user
     return user;

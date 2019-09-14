@@ -29,6 +29,7 @@ server.express.use(function(req, res, next) {
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept",
   );
+  // Attempt to configure for tablet browsers
   res.header("Access-Control-Allow-Credentials", true);
   next();
 });
