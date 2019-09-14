@@ -104,7 +104,7 @@ export const Nav = () => {
                           )}
                         </Mutation>
                         <Link href="/create">
-                          <a className="button is-primary">
+                          <a className="button is-primary" onClick={toggleMobileMenu}>
                             <strong>Create</strong>
                           </a>
                         </Link>
@@ -113,10 +113,17 @@ export const Nav = () => {
                     {!me && (
                       <Fragment>
                         <Link href="/signup">
-                          <a className="button is-info is-outlined">Sign Up</a>
+                          <a
+                            className="button is-info is-outlined"
+                            onClick={toggleMobileMenu}
+                          >
+                            Sign Up
+                          </a>
                         </Link>
                         <Link href="/signin">
-                          <a className="button is-primary">Sign In</a>
+                          <a className="button is-primary" onClick={toggleMobileMenu}>
+                            Sign In
+                          </a>
                         </Link>
                       </Fragment>
                     )}

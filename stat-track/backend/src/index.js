@@ -36,12 +36,9 @@ server.express.use(function(req, res, next) {
 
 // decode the jwt in localstorage so we can get the user id on each request.
 server.express.use((req, res, next) => {
-  // console.log("JWT MIDDLEWARE");
-  // console.log({ req });
   // grab the cookie available by cookieParser
   const { token } = req.cookies;
 
-  console.log("MOBILE REQ OBJ >>>", req);
   // decode the token
   if (token) {
     const { userId } = jwt.verify(token, process.env.APP_SECRET);
