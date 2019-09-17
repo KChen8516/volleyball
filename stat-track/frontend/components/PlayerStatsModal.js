@@ -29,7 +29,7 @@ export const PlayerStatsModal = ({ isActive, toggleModal, stats, activePlayer })
 
   const renderPlayerStats = () => {
     return playerStats.map((stat) => {
-      const isError = stat.result === "error";
+      const isError = stat.result === "error" || stat.result === "0";
       return (
         <tr style={isError ? ERROR_STATS_STYLES : null}>
           <th style={isError ? { color: "#e15554" } : null}>{stat.action}</th>
@@ -83,7 +83,7 @@ export const PlayerStatsModal = ({ isActive, toggleModal, stats, activePlayer })
         <div className={"modal " + (isActive ? "is-active" : null)}>
           <div className="modal-background" />
           <div className="modal-card">
-            <header className="modal-card-head">
+            <header className="modal-card-head" style={{ padding: 12 }}>
               {activePlayer && (
                 <p className="modal-card-title">
                   {activePlayer.firstName} {activePlayer.lastName} Stats
@@ -126,7 +126,7 @@ export const PlayerStatsModal = ({ isActive, toggleModal, stats, activePlayer })
                 </table>
               </div>
             </section>
-            <footer className="modal-card-foot">
+            <footer className="modal-card-foot" style={{ padding: 8 }}>
               <button className="button" onClick={toggle}>
                 Close
               </button>

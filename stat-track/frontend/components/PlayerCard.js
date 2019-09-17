@@ -59,6 +59,12 @@ export const PlayerCard = ({
     console.log("Component appeared");
   };
 
+  const trimLastName = (name) => {
+    if (!name) return "";
+
+    return name.toUpperCase().charAt(0) + ".";
+  };
+
   return (
     <div className="card">
       <header className="card-header">
@@ -94,7 +100,9 @@ export const PlayerCard = ({
                 setActivePlayer(currentPlayer);
               }}
             >
-              {`${currentPlayer.firstName} ${currentPlayer.lastName} #${currentPlayer.number}`}
+              {`${currentPlayer.firstName} ${trimLastName(
+                currentPlayer.lastName,
+              )} #${currentPlayer.number}`}
               <StatsIcon className="icon has-text-info">
                 <i className="fas fa-table" />
               </StatsIcon>
@@ -196,7 +204,7 @@ export const PlayerCard = ({
                 disabled={isSubMode}
                 style={{ backgroundColor: "#2851b2", color: "white" }}
               >
-                Error
+                E
               </span>
             </div>
           </StatRow>

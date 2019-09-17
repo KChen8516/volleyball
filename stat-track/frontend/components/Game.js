@@ -118,7 +118,7 @@ export const GameScreen = ({ gameId, homeTeamId }) => {
         cards.push(
           <div className="column is-one-third-tablet is-half-mobile" key={i}>
             <PlayerCard
-              player={players[i]}
+              player={player}
               onStatChange={recordStat}
               toggleModal={setIsActive}
               setActivePlayer={setActivePlayer}
@@ -239,7 +239,7 @@ export const GameScreen = ({ gameId, homeTeamId }) => {
                   <div className="columns is-multiline is-mobile">
                     {renderPlayerCards(players)}
                   </div>
-                  <div className="field is-grouped">
+                  <div className="field is-grouped" style={{ paddingBottom: 10 }}>
                     <p className="control" onClick={() => submitGame(updateGame)}>
                       <a className="button is-link">Save Game</a>
                     </p>
