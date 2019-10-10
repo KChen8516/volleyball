@@ -1,13 +1,26 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
+import styled from "styled-components";
 
 const ERROR_STATS_STYLES = {
   backgroundColor: "#f1c1c0",
   color: "#e15554",
 };
 
-export const PlayerStatsModal = ({ isActive, toggleModal, stats, activePlayer }) => {
+const StatContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const PlayerStatsModal = ({
+  isActive,
+  toggleModal,
+  stats,
+  activePlayer,
+  deleteStat,
+}) => {
   const [ playerStats, setplayerStats ] = useState([]);
 
   useEffect(
@@ -27,13 +40,27 @@ export const PlayerStatsModal = ({ isActive, toggleModal, stats, activePlayer })
     return stats.filter((stat) => stat.player === activePlayer.id).reverse();
   };
 
+  const isErrorStat = (stat) => {
+    return (
+      stat.result === "error" ||
+      (stat.result === "0" && stat.action !== "serving") ||
+      stat.action === "other"
+    );
+  };
+
   const renderPlayerStats = () => {
     return playerStats.map((stat) => {
-      const isError = stat.result === "error" || stat.result === "0";
+      const isError = isErrorStat(stat);
+
       return (
-        <tr style={isError ? ERROR_STATS_STYLES : null}>
+        <tr style={isError ? ERROR_STATS_STYLES : null} key={stat.id}>
           <th style={isError ? { color: "#e15554" } : null}>{stat.action}</th>
-          <td>{stat.result}</td>
+          <td>
+            <StatContainer>
+              <span>{stat.result} </span>
+              <a className="delete" onClick={() => deleteStat(stat.id)} />
+            </StatContainer>
+          </td>
         </tr>
       );
     });
@@ -77,6 +104,10 @@ export const PlayerStatsModal = ({ isActive, toggleModal, stats, activePlayer })
     return ((kills - errors) / attempts).toFixed(3);
   };
 
+  const countDigs = () => {
+    return playerStats.filter((stat) => stat.action === "dig").length;
+  };
+
   // SSR doesn't provide client objects so check for browser env
   return process.browser
     ? ReactDOM.createPortal(
@@ -113,6 +144,12 @@ export const PlayerStatsModal = ({ isActive, toggleModal, stats, activePlayer })
                       <p className="title">{calcHittingPercentage()}</p>
                     </div>
                   </div>
+                  <div className="level-item has-text-centered">
+                    <div>
+                      <p className="heading">Digs</p>
+                      <p className="title">{countDigs()}</p>
+                    </div>
+                  </div>
                 </nav>
                 {/* Raw table stats */}
                 <table className="table is-striped is-fullwidth">
@@ -143,4 +180,5 @@ PlayerStatsModal.propTypes = {
   toggle: PropTypes.func,
   stats: PropTypes.array,
   activePlayer: PropTypes.object,
+  deleteStat: PropTypes.func,
 };

@@ -2,12 +2,11 @@ import React, { useState, Fragment } from "react";
 // import { Transition } from "react-transition-group";
 import styled from "styled-components";
 
-const ContentContainer = styled.div`padding: 1rem;`;
+const ContentContainer = styled.div`padding: 0.75rem;`;
 
-const StatTitle = styled.h5`
-  && {
-    margin-bottom: 0.5rem;
-  }
+const RowLabel = styled.span`
+  font-size: 1.5rem;
+  padding-right: 4px;
 `;
 
 const PlayerSelectorContainer = styled.div`
@@ -17,7 +16,14 @@ const PlayerSelectorContainer = styled.div`
   padding: 8px 0 8px 8px;
 `;
 
-const StatRow = styled.div`margin-bottom: 1rem;`;
+const StatRow = styled.div`
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  :last-child {
+    margin-bottom: 0;
+  }
+`;
 
 const StatsIcon = styled.span`
   padding-left: 4px;
@@ -55,9 +61,9 @@ export const PlayerCard = ({
     isSubMode ? setSubMode(false) : setSubMode(true);
   };
 
-  const fadeUpdateTag = () => {
-    console.log("Component appeared");
-  };
+  // const fadeUpdateTag = () => {
+  //   console.log("Component appeared");
+  // };
 
   const trimLastName = (name) => {
     if (!name) return "";
@@ -127,7 +133,7 @@ export const PlayerCard = ({
         </Transition> */}
         <div className="stat-track">
           <StatRow>
-            <StatTitle className="subtitle is-5">Passing</StatTitle>
+            {/* <RowLabel>P:</RowLabel> */}
             <div className="buttons">
               <span
                 className="button is-rounded"
@@ -164,7 +170,7 @@ export const PlayerCard = ({
             </div>
           </StatRow>
           <StatRow>
-            <StatTitle className="subtitle is-5">Serving</StatTitle>
+            {/* <RowLabel>S:</RowLabel> */}
             <div className="buttons">
               <span
                 className="button is-rounded"
@@ -196,7 +202,7 @@ export const PlayerCard = ({
                 disabled={isSubMode}
                 style={{ backgroundColor: "#2851b2", color: "white" }}
               >
-                Ace
+                A
               </span>
               <span
                 className="button is-rounded"
@@ -208,8 +214,8 @@ export const PlayerCard = ({
               </span>
             </div>
           </StatRow>
-          <div>
-            <StatTitle className="subtitle is-5">Hitting</StatTitle>
+          <StatRow>
+            {/* <RowLabel>H:</RowLabel> */}
             <div className="buttons">
               <span
                 className="button is-rounded"
@@ -217,7 +223,7 @@ export const PlayerCard = ({
                 disabled={isSubMode}
                 style={{ backgroundColor: "#8f83bc", color: "white" }}
               >
-                Attempt
+                A
               </span>
               <span
                 className="button is-success is-rounded"
@@ -225,7 +231,7 @@ export const PlayerCard = ({
                 disabled={isSubMode}
                 style={{ backgroundColor: "#8375b5", color: "white" }}
               >
-                Kill
+                K
               </span>
               <span
                 className="button is-danger is-rounded"
@@ -233,10 +239,58 @@ export const PlayerCard = ({
                 disabled={isSubMode}
                 style={{ backgroundColor: "#7768ae", color: "white" }}
               >
-                Error
+                E
+              </span>
+
+              {/* <div style={{ paddingLeft: 24 }}>
+                <span
+                  className="button is-success is-rounded"
+                  onClick={() => createGameStat("dig", "downball")}
+                  disabled={isSubMode}
+                  style={{ backgroundColor: "#982649", color: "white" }}
+                >
+                  D
+                </span>
+                <span
+                  className="button is-danger is-rounded"
+                  onClick={() => createGameStat("dig", "freeball")}
+                  disabled={isSubMode}
+                  style={{ backgroundColor: "#982649", color: "white" }}
+                >
+                  F
+                </span>
+              </div> */}
+            </div>
+          </StatRow>
+          <StatRow>
+            {/* <RowLabel>P:</RowLabel> */}
+            <div className="buttons">
+              <span
+                className="button is-success is-rounded"
+                onClick={() => createGameStat("dig", "downball")}
+                disabled={isSubMode}
+                style={{ backgroundColor: "#AA4d6a", color: "white" }}
+              >
+                D
+              </span>
+              <span
+                className="button is-danger is-rounded"
+                onClick={() => createGameStat("dig", "freeball")}
+                disabled={isSubMode}
+                style={{ backgroundColor: "#982649", color: "white" }}
+              >
+                F
+              </span>
+              <span
+                className="button is-rounded"
+                onClick={() => createGameStat("other", "ball handling error")}
+                disabled={isSubMode}
+                style={{ backgroundColor: "#7d203c", color: "white" }}
+              >
+                BHE
               </span>
             </div>
-          </div>
+          </StatRow>
         </div>
       </ContentContainer>
     </div>

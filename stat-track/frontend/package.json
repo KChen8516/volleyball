@@ -37,6 +37,7 @@
     "react-stripe-checkout": "^2.6.3",
     "react-transition-group": "^2.5.0",
     "styled-components": "^3.4.9",
+    "uuid": "^3.3.3",
     "waait": "^1.0.2"
   },
   "devDependencies": {
@@ -50,7 +51,10 @@
   },
   "jest": {
     "setupTestFrameworkScriptFile": "<rootDir>/jest.setup.js",
-    "testPathIgnorePatterns": [ "<rootDir>/.next/", "<rootDir>/node_modules/" ],
+    "testPathIgnorePatterns": [
+      "<rootDir>/.next/",
+      "<rootDir>/node_modules/"
+    ],
     "transform": {
       "\\.(gql|graphql)$": "jest-transform-graphql",
       ".*": "babel-jest",
@@ -61,7 +65,9 @@
   "babel": {
     "env": {
       "development": {
-        "presets": [ "next/babel" ],
+        "presets": [
+          "next/babel"
+        ],
         "plugins": [
           [
             "styled-components",
@@ -73,7 +79,9 @@
         ]
       },
       "production": {
-        "presets": [ "next/babel" ],
+        "presets": [
+          "next/babel"
+        ],
         "plugins": [
           [
             "styled-components",

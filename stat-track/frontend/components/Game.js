@@ -3,6 +3,7 @@ import styled from "styled-components";
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
 import Router from "next/router";
+import uuid from "uuid";
 
 import { PlayerCard } from "./PlayerCard";
 import { PlayerStatsModal } from "./PlayerStatsModal";
@@ -101,6 +102,7 @@ export const GameScreen = ({ gameId, homeTeamId }) => {
   const recordStat = ({ playerId, firstName, lastName, action, result }) => {
     setStats((stats) =>
       stats.concat({
+        id: uuid.v4(),
         team: homeTeamId,
         player: playerId,
         playerName: `${firstName} ${lastName}`,
@@ -183,6 +185,11 @@ export const GameScreen = ({ gameId, homeTeamId }) => {
     return calculatedAverage;
   };
 
+  const deleteStat = (id) => {
+    const removeStat = stats.filter((stat) => stat.id !== id);
+    setStats(removeStat);
+  };
+
   return (
     <Query query={SINGLE_TEAM_QUERY} variables={{ id: homeTeamId }}>
       {({ data, loading, error }) => {
@@ -263,6 +270,7 @@ export const GameScreen = ({ gameId, homeTeamId }) => {
                     toggleModal={setIsActive}
                     stats={stats}
                     activePlayer={activePlayer}
+                    deleteStat={deleteStat}
                   />
                 </Container>
               );
