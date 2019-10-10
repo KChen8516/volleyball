@@ -190,6 +190,14 @@ export const GameScreen = ({ gameId, homeTeamId }) => {
     setStats(removeStat);
   };
 
+  const removeStatIds = () => {
+    return stats.map((stat) => {
+      // remove the id field used for deleting locally
+      const { id, ...rest } = stat;
+      return rest;
+    });
+  };
+
   return (
     <Query query={SINGLE_TEAM_QUERY} variables={{ id: homeTeamId }}>
       {({ data, loading, error }) => {
@@ -203,13 +211,17 @@ export const GameScreen = ({ gameId, homeTeamId }) => {
           return <Error error={error} />;
         }
 
+        if (!players) {
+          <h1>Error: No players were found.</h1>;
+        }
+
         return (
           <Mutation
             mutation={UPDATE_GAME_MUTATION}
             variables={{
               id: gameId,
               homeTeamId,
-              stats,
+              stats: removeStatIds(stats),
               homeTeam: name,
             }}
             onCompleted={clearLocalStorage}
@@ -248,7 +260,9 @@ export const GameScreen = ({ gameId, homeTeamId }) => {
                   </div>
                   <div className="field is-grouped" style={{ paddingBottom: 10 }}>
                     <p className="control" onClick={() => submitGame(updateGame)}>
-                      <a className="button is-link">Save Game</a>
+                      <a className="button is-link" disabled={loading}>
+                        Save Game
+                      </a>
                     </p>
                     <p
                       className="control"
@@ -257,7 +271,7 @@ export const GameScreen = ({ gameId, homeTeamId }) => {
                         Router.push({ pathname: "/create" });
                       }}
                     >
-                      <a className="button is-danger is-outlined">
+                      <a className="button is-danger is-outlined" disabled={loading}>
                         <span>Delete</span>
                         <span className="icon is-small">
                           <i className="fas fa-times" />

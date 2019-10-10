@@ -4,11 +4,6 @@ import styled from "styled-components";
 
 const ContentContainer = styled.div`padding: 0.75rem;`;
 
-const RowLabel = styled.span`
-  font-size: 1.5rem;
-  padding-right: 4px;
-`;
-
 const PlayerSelectorContainer = styled.div`
   display: flex;
   align-items: center;
@@ -133,7 +128,6 @@ export const PlayerCard = ({
         </Transition> */}
         <div className="stat-track">
           <StatRow>
-            {/* <RowLabel>P:</RowLabel> */}
             <div className="buttons">
               <span
                 className="button is-rounded"
@@ -170,7 +164,6 @@ export const PlayerCard = ({
             </div>
           </StatRow>
           <StatRow>
-            {/* <RowLabel>S:</RowLabel> */}
             <div className="buttons">
               <span
                 className="button is-rounded"
@@ -202,7 +195,7 @@ export const PlayerCard = ({
                 disabled={isSubMode}
                 style={{ backgroundColor: "#2851b2", color: "white" }}
               >
-                A
+                0
               </span>
               <span
                 className="button is-rounded"
@@ -210,12 +203,11 @@ export const PlayerCard = ({
                 disabled={isSubMode}
                 style={{ backgroundColor: "#2851b2", color: "white" }}
               >
-                E
+                SE
               </span>
             </div>
           </StatRow>
           <StatRow>
-            {/* <RowLabel>H:</RowLabel> */}
             <div className="buttons">
               <span
                 className="button is-rounded"
@@ -239,31 +231,11 @@ export const PlayerCard = ({
                 disabled={isSubMode}
                 style={{ backgroundColor: "#7768ae", color: "white" }}
               >
-                E
+                HE
               </span>
-
-              {/* <div style={{ paddingLeft: 24 }}>
-                <span
-                  className="button is-success is-rounded"
-                  onClick={() => createGameStat("dig", "downball")}
-                  disabled={isSubMode}
-                  style={{ backgroundColor: "#982649", color: "white" }}
-                >
-                  D
-                </span>
-                <span
-                  className="button is-danger is-rounded"
-                  onClick={() => createGameStat("dig", "freeball")}
-                  disabled={isSubMode}
-                  style={{ backgroundColor: "#982649", color: "white" }}
-                >
-                  F
-                </span>
-              </div> */}
             </div>
           </StatRow>
           <StatRow>
-            {/* <RowLabel>P:</RowLabel> */}
             <div className="buttons">
               <span
                 className="button is-success is-rounded"

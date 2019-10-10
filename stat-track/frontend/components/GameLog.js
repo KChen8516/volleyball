@@ -68,13 +68,20 @@ export const GamesLog = () => {
         <h1 className="title">Recent Games</h1>
         <ComposedHOC>
           {({ user, games }) => {
+            if (!user) {
+              return <div>Error: User was not defined.</div>;
+            }
+
+            if (!games) {
+              return <div>Error: No games returned.</div>;
+            }
+
             const me = user.data.me;
             const allGames = games.data.games;
-
             const filteredGames = filterGamesByUser(allGames, me.id);
 
             if (filteredGames.length === 0) {
-              return <div>No Games</div>;
+              return <div>You don't have any games yet! You should play one.</div>;
             }
 
             return <div>{renderGames(filteredGames)}</div>;
