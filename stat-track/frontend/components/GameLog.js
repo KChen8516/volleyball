@@ -57,8 +57,8 @@ export const GamesLog = () => {
 
   const routeToGame = (gameObj) => {
     Router.push({
-      pathname: "/game",
-      query: { id: gameObj.id, homeTeamId: gameObj.homeTeamId },
+      pathname: "/postgame",
+      query: { id: gameObj.id },
     });
   };
 
